@@ -72,7 +72,6 @@ function GetSimbriefOFP() {
     document.getElementById("inpID").value = smbrfID.toString();
 
     flightData = JSON.parse(localStorage.getItem('flight_data'));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
 
     if (flightData == null || isEmpty(flightData)) {
         console.log("Fetching flightData from Simbrief.");
@@ -99,6 +98,8 @@ function GetSimbriefOFP() {
                 // Handle any errors that occurred during the fetch
                 console.error('There was a problem with the fetch operation:', error);
             });
+    } else {
+        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
     }
 }
 
