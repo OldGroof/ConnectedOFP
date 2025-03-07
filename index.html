@@ -31,11 +31,14 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body>
+<body onload="GetSimbriefOFP()">
 
     <div class="header">
         <div class="row">
             <h1>ConnectedOFP</h1>
+            <input type="text" id="inpID" class="input" inputmode="numeric" style="float: right; margin-left: auto;" value = "" placeholder="Enter ID"
+            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" maxlength="6"
+            />
         </div>
     </div>
 
@@ -62,7 +65,7 @@
             </a>
         </div>
     </div>
-
+    <script src="Scripts/index.js"></script>
 </body>
 
 </html>

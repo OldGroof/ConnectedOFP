@@ -12,34 +12,40 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body>
+<body onload="GetPDF()">
     <div class="header" style="z-index: 5">
         <div class="row">
             <h1>ConnectedOFP | OFP Viewer</h1>
-            <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span class="material-icons" >home</span></a>
+            <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span
+                    class="material-icons">home</span></a>
         </div>
+    </div>
+
+    <div class="bar" style="margin-top: 75px; display: flex; justify-content: center;">
+        <iframe id="outPDF" src=""></iframe>
     </div>
 
     <div class="footer" style="z-index: 5">
         <div style="display: flex; justify-content: center;">
             <a id="ofp" href="pdf.html">
-                <span class="material-icons" >receipt_long</span>
+                <span class="material-icons">receipt_long</span>
                 <p>OFP</p>
             </a>
             <a id="nav" href="navlog.html">
-                <span class="material-icons" >list</span>
+                <span class="material-icons">list</span>
                 <p>Navlog</p>
             </a>
             <a id="pln" href="plnfuel.html">
-                <span class="material-icons" >view_in_ar</span>
+                <span class="material-icons">view_in_ar</span>
                 <p>Fuel Plan</p>
             </a>
             <a id="act" href="actfuel.html">
-                <span class="material-icons" >speed</span>
+                <span class="material-icons">speed</span>
                 <p>Actual Fuel</p>
             </a>
         </div>
     </div>
+    <script src="../Scripts/index.js"></script>
 </body>
 
 </html>
