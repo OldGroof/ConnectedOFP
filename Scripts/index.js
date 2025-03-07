@@ -140,6 +140,11 @@ function RefreshOFP() {
 }
 
 function GetPDF() {
+    if (flightData == null || isEmpty(flightData)) {
+        flightData = JSON.parse(localStorage.getItem('flight_data'));
+        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
+    }
+
     const dir = flightData.files.directory + flightData.files.pdf.link;
     const pfdEmbed = document.getElementById('outPDF');
     pfdEmbed.src = dir;
