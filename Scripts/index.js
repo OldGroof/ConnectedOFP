@@ -115,18 +115,15 @@ function FetchSimbriefAPI() {
 
     fetch(url)
         .then(response => {
-            // Check if the response is successful
             if (!response.ok) {
                 throw new Error('Network response was not ok');
             }
-            // Parse the response as JSON
             return response.json();
         })
         .then(data => {
             SetFlightData(data);
         })
         .catch(error => {
-            // Handle any errors that occurred during the fetch
             console.error('There was a problem with the fetch operation:', error);
         });
 }
