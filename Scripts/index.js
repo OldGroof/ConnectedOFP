@@ -212,6 +212,8 @@ function GetFuelPlan() {
                 select.value = i;
         }
     }
+    if (select.options.length == 0)
+        select.disabled = true;
 }
 
 function UpdateFuelPlan() {
