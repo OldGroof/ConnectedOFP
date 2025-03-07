@@ -46,12 +46,7 @@ function SetSimbriefID(id) {
         RefreshOFP();
     } else {
         smbrfID = 0;
-
-        flightData = {};
-        sessionStorage.removeItem('flight_data');
-        localStorage.removeItem('flight_data');
-        document.getElementById("inpID").value = "";
-        document.getElementById("txtFltID").innerHTML = "Flight";
+        ResetData();
     }
 }
 
@@ -63,12 +58,7 @@ function GetSimbriefOFP() {
 
     if (smbrfID == 0) {
         console.error("There is no Simbrief ID.");
-
-        flightData = {};
-        sessionStorage.removeItem('flight_data');
-        localStorage.removeItem('flight_data');
-        document.getElementById("inpID").value = "";
-        document.getElementById("txtFltID").innerHTML = "Flight";
+        ResetData();
         return;
     }
     document.getElementById("inpID").value = smbrfID.toString();
@@ -76,30 +66,9 @@ function GetSimbriefOFP() {
     flightData = JSON.parse(localStorage.getItem('flight_data'));
 
     if (flightData == null || isEmpty(flightData)) {
-        console.log("Fetching flightData from Simbrief.");
-
-        //https://www.simbrief.com/api/xml.fetcher.php?userid=xxxxxx&json=1
-        let url = 'https://www.simbrief.com/api/xml.fetcher.php?userid=';
-        url += smbrfID.toString() + "&json=1";
-
-        fetch(url)
-            .then(response => {
-                // Check if the response is successful
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                // Parse the response as JSON
-                return response.json();
-            })
-            .then(data => {
-                SetFlightData(data);
-            })
-            .catch(error => {
-                // Handle any errors that occurred during the fetch
-                console.error('There was a problem with the fetch operation:', error);
-            });
+        FetchSimbriefAPI();
     } else {
-        let date = formatDate(flightData.api_params.date);
+        let date = FormatDate(flightData.api_params.date);
         let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
         fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
         console.log(fltID);
@@ -112,14 +81,32 @@ function GetSimbriefOFP() {
 function RefreshOFP() {
     if (smbrfID == 0) {
         console.error("There is no Simbrief ID.");
-
-        flightData = {};
-        sessionStorage.removeItem('flight_data');
-        localStorage.removeItem('flight_data');
-        document.getElementById("inpID").value = "";
-        document.getElementById("txtFltID").innerHTML = "Flight";
+        ResetData();
         return;
     }
+    FetchSimbriefAPI();
+}
+
+function FormatDate(seconds) {
+    const date = new Date(seconds * 1000);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    return `${day}${month}`;
+}
+
+function SetFlightData(data) {
+    localStorage.setItem('flight_data', JSON.stringify(data));
+    sessionStorage.setItem('flight_data', JSON.stringify(data));
+    flightData = data;
+
+    let date = FormatDate(flightData.api_params.date);
+    let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+    fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
+    console.log(fltID);
+    document.getElementById("txtFltID").innerHTML = fltID;
+}
+
+function FetchSimbriefAPI() {
     console.log("Fetching flightData from Simbrief.");
 
     //https://www.simbrief.com/api/xml.fetcher.php?userid=xxxxxx&json=1
@@ -144,23 +131,13 @@ function RefreshOFP() {
         });
 }
 
-function formatDate(seconds) {
-    const date = new Date(seconds * 1000);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-    return `${day}${month}`;
-}
-
-function SetFlightData(data) {
-    localStorage.setItem('flight_data', JSON.stringify(data));
-    sessionStorage.setItem('flight_data', JSON.stringify(data));
-    flightData = data;
-
-    let date = formatDate(flightData.api_params.date);
-    let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
-    fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
-    console.log(fltID);
-    document.getElementById("txtFltID").innerHTML = fltID;
+function ResetData() {
+    flightData = {};
+    sessionStorage.removeItem('flight_data');
+    localStorage.removeItem('flight_data');
+    document.getElementById("inpID").value = "";
+    document.getElementById("txtFltID").innerHTML = "Flight";
+    document.cookie = "simbrief_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
 function GetPDF() {
