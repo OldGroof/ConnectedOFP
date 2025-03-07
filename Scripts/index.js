@@ -182,6 +182,7 @@ function GetFuelPlan() {
     else
         units = " lb";
 
+    document.getElementById('lblCont').innerHTML = "CONT: " + flightData.general.cont_rule;
     document.getElementById('txtTaxiFuel').innerHTML = fuelData.taxi + units;
     document.getElementById('txtTripFuel').innerHTML = fuelData.enroute_burn + units;
     document.getElementById('txtAltnFuel').innerHTML = fuelData.alternate_burn + units;
