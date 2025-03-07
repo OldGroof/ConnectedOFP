@@ -35,7 +35,7 @@
   padding: 18px 17px;
   text-decoration: none;
   font-size: 18px;
-  cursor: pointer;
+  cursor: text;
   border: none;
   background-color: transparent;
   outline: none;
@@ -77,12 +77,47 @@
 }
 
 .table-row {
-  width: inherit;
+  width: 100%;
   display: flex;
-  padding: 10px 5px;
+  padding: 10px 0px;
   border-bottom-width: 1px;
   border-bottom-style: solid;
   border-bottom-color: rgb(239, 239, 239);
+}
+
+.fuel-val {
+  font-size: 20px;
+  text-align: right;
+  font-weight: 350;
+  float: right;
+  margin-left: auto;
+  margin-right: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.fuel-inp {
+  padding-right: 24px;
+  font-size: 20px;
+  text-align: right;
+  font-weight: 350;
+  color: rgb(78, 78, 78);
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: text;
+}
+.fuel-inp:focus {
+  outline: none;
+}
+
+select {
+  font-size: 20px;
+  color: rgb(78, 78, 78);
+  margin-left: 15px;
+}
+select:focus {
+  outline: none;
 }
 
 .row {
@@ -121,15 +156,13 @@ h2 {
 }
 
 h3 {
-  margin-left: 0px;
+  margin-left: 5px;
   margin-top: auto;
   margin-bottom: auto;
-  font-size: 28px;
+  font-size: 26px;
   font-weight: 350;
   text-align: left;
-  white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 .text-left {

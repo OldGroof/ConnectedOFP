@@ -22,35 +22,48 @@
 
     <div class="bar" style="margin-top: 84px; display: flex; justify-content: center; height: calc(100vh - 185px);">
         <div style="width: 100%; display: flex; justify-content: center;">
-            <div class="column" style="position: relative;">
-                <div style="overflow-y: scroll; height: calc(100% - 58px);">
+            <div class="column">
+                <div style="overflow-y: scroll; height: calc(100% - 53px);">
                     <div class="table-row">
                         <h3>TAXI</h3>
+                        <p class="fuel-val" id="txtTaxiFuel">- kg</p>
                     </div>
                     <div class="table-row">
                         <h3>TRIP</h3>
+                        <p class="fuel-val" id="txtTripFuel">- kg</p>
                     </div>
                     <div class="table-row">
                         <h3>CONT</h3>
+                        <p class="fuel-val" id="txtContFuel">- kg</p>
                     </div>
                     <div class="table-row">
-                        <h3>ALTN</h3>
+                        <h3>ALTN:</h3>
+                        <select id="inpAltns" style="margin-top: auto; margin-bottom: auto;"></select>
+                        <p class="fuel-val" id="txtAltnFuel">- kg</p>
                     </div>
                     <div class="table-row">
                         <h3>FINRES</h3>
+                        <p class="fuel-val" id="txtFinResFuel">- kg</p>
                     </div>
                     <div class="table-row" style="background-color: rgb(238, 238, 238);">
-                        <h3 style="font-weight: 600;">PLN BLK</h3>
+                        <h3 style="font-weight: 500;">PLN BLK</h3>
+                        <p class="fuel-val" id="txtPlnBlkFuel">- kg</p>
                     </div>
                     <div class="table-row">
                         <h3>Tankering</h3>
+                        <div style="float: right; margin-left: auto; margin-right: 15px; margin-top: auto; margin-bottom: auto;">
+                            <input id="inpTankFuel" class="fuel-inp" type="text" inputmode="numeric" placeholder="-" maxlength="4"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </input>
+                            <span class style="font-size: 20px; font-weight: 350; margin-left:-24px;">kg</span>
+                        </div>
                     </div>
                 </div>
-                <div class="table-row" style="position: absolute; bottom: 0; background-color: rgb(238, 238, 238);">
-                    <h3 style="font-weight: 600;">FINAL BLK</h3>
+                <div class="table-row" style="position: relative; bottom: 0; width: 100%; background-color: rgb(238, 238, 238);">
+                    <h3 style="font-weight: 500;">FINAL BLK</h3>
                 </div>
             </div>
-            <div class="column" style="background-color: red;">
+            <div class="column" style="background-color: rgb(238, 238, 238);">
                 
             </div>
         </div>
