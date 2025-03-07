@@ -3,13 +3,13 @@ if (inputElement != null) {
     inputElement.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             const inputValue = inputElement.value;
-            SetSimbriefID(Number(inputValue));
+            SetSimbriefID(inputValue);
             inputElement.blur();
         }
     });
 }
 
-var smbrfID = 0;
+var smbrfID = "";
 var flightData = JSON.parse(sessionStorage.getItem('flight_data'));
 
 function setCookie(cname, cvalue, exdays) {
@@ -41,11 +41,11 @@ function isEmpty(obj) {
 function SetSimbriefID(id) {
     if (id != null && id != 0) {
         smbrfID = id;
-        setCookie("simbrief_id", smbrfID.toString(), 30);
+        setCookie("simbrief_id", smbrfID, 30);
 
         RefreshOFP();
     } else {
-        smbrfID = 0;
+        smbrfID = "";
         ResetData();
     }
 }
@@ -53,15 +53,15 @@ function SetSimbriefID(id) {
 function GetSimbriefOFP() {
     let id_cookie = getCookie("simbrief_id");
     if (id_cookie != "")
-        smbrfID = parseInt(getCookie("simbrief_id"));
-    else smbrfID = 0;
+        smbrfID = id_cookie;
+    else smbrfID = "";
 
-    if (smbrfID == 0) {
+    if (smbrfID == "") {
         console.error("There is no Simbrief ID.");
         ResetData();
         return;
     }
-    document.getElementById("inpID").value = smbrfID.toString();
+    document.getElementById("inpID").value = smbrfID;
 
     flightData = JSON.parse(localStorage.getItem('flight_data'));
 
@@ -79,7 +79,7 @@ function GetSimbriefOFP() {
 }
 
 function RefreshOFP() {
-    if (smbrfID == 0) {
+    if (smbrfID == "") {
         console.error("There is no Simbrief ID.");
         ResetData();
         return;
@@ -107,11 +107,14 @@ function SetFlightData(data) {
 }
 
 function FetchSimbriefAPI() {
-    console.log("Fetching flightData from Simbrief.");
+    console.log("Fetching flightData from Simbrief.", smbrfID);
 
     //https://www.simbrief.com/api/xml.fetcher.php?userid=xxxxxx&json=1
+    //https://www.simbrief.com/api/xml.fetcher.php?username=xxxxxx&json=1
     let url = 'https://www.simbrief.com/api/xml.fetcher.php?userid=';
-    url += smbrfID.toString() + "&json=1";
+    if (isNaN(smbrfID))
+        url = 'https://www.simbrief.com/api/xml.fetcher.php?username='
+    url += smbrfID + "&json=1";
 
     fetch(url)
         .then(response => {
