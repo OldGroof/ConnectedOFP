@@ -11,6 +11,7 @@ if (inputElement != null) {
 
 var smbrfID = "";
 var flightData = JSON.parse(sessionStorage.getItem('flight_data'));
+var fuelData = flightData.fuel;
 
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
@@ -63,7 +64,7 @@ function GetSimbriefOFP() {
     }
     document.getElementById("inpID").value = smbrfID;
 
-    flightData = JSON.parse(localStorage.getItem('flight_data'));
+    GetFlightDataLocal();
 
     if (flightData == null || isEmpty(flightData)) {
         FetchSimbriefAPI();
@@ -98,6 +99,10 @@ function SetFlightData(data) {
     localStorage.setItem('flight_data', JSON.stringify(data));
     sessionStorage.setItem('flight_data', JSON.stringify(data));
     flightData = data;
+
+    fuelData = flightData.fuel;
+    localStorage.removeItem('fuel_data');
+    localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 
     let date = FormatDate(flightData.api_params.date);
     let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
@@ -135,16 +140,20 @@ function ResetData() {
     flightData = {};
     sessionStorage.removeItem('flight_data');
     localStorage.removeItem('flight_data');
+    localStorage.removeItem('fuel_data');
     document.getElementById("inpID").value = "";
     document.getElementById("txtFltID").innerHTML = "Flight";
     document.cookie = "simbrief_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
+function GetFlightDataLocal() {
+    flightData = JSON.parse(localStorage.getItem('flight_data'));
+    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
+}
+
 function GetPDF() {
-    if (flightData == null || isEmpty(flightData)) {
-        flightData = JSON.parse(localStorage.getItem('flight_data'));
-        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
-    }
+    if (flightData == null || isEmpty(flightData)) 
+        GetFlightDataLocal();
 
     const dir = flightData.files.directory + flightData.files.pdf.link;
     const pfdEmbed = document.getElementById('outPDF');
@@ -152,19 +161,15 @@ function GetPDF() {
 }
 
 function GetFuelPlan() {
-    if (flightData == null || isEmpty(flightData)) {
-        flightData = JSON.parse(localStorage.getItem('flight_data'));
-        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
-    }
+    if (flightData == null || isEmpty(flightData)) 
+        GetFlightDataLocal();
+    if (fuelData == null || isEmpty(fuelData))
+        fuelData = localStorage.getItem('fuel_data');
 
-    // populate fuel stuff here
-    // taxi
-    // trip
-    // cont
-    // alternate
-    // finres
-    // plog
-    // tankering
-    // disc
-    // final blk
+    console.log(JSON.stringify(fuelData));
+}
+
+function UpdateFuelPlan() {
+    // here we want to enter in the fuel values, including discretionary items.
+    // then save to localstorage
 }
