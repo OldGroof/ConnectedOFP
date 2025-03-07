@@ -36,6 +36,7 @@
   text-decoration: none;
   font-size: 18px;
   cursor: pointer;
+  border: none;
   background-color: transparent;
   outline: none;
 }
