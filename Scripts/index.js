@@ -72,6 +72,7 @@ function GetSimbriefOFP() {
     document.getElementById("inpID").value = smbrfID.toString();
 
     flightData = JSON.parse(localStorage.getItem('flight_data'));
+    sessionStorage.setItem('flight_data', JSON.stringify(data));
 
     if (flightData == null || isEmpty(flightData)) {
         console.log("Fetching flightData from Simbrief.");
