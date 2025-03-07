@@ -147,3 +147,21 @@ function GetPDF() {
     const pfdEmbed = document.getElementById('outPDF');
     pfdEmbed.src = dir;
 }
+
+function GetFuelPlan() {
+    if (flightData == null || isEmpty(flightData)) {
+        flightData = JSON.parse(localStorage.getItem('flight_data'));
+        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
+    }
+
+    // populate fuel stuff here
+    // taxi
+    // trip
+    // cont
+    // alternate
+    // finres
+    // plog
+    // tankering
+    // disc
+    // final blk
+}

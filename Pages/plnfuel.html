@@ -12,7 +12,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body>
+<body onload="GetFuelPlan()">
     <div class="header" style="z-index: 5">
         <div class="row">
             <h1>ConnectedOFP | Fuel Planning</h1>
@@ -20,15 +20,15 @@
         </div>
     </div>
 
+    <div class="bar" style="margin-top: 84px; display: flex; justify-content: center; height: calc(100vh - 185px);">
+        
+    </div>
+
     <div class="footer" style="z-index: 5">
         <div style="display: flex; justify-content: center;">
             <a id="ofp" href="pdf.html">
                 <span class="material-icons" >receipt_long</span>
                 <p>OFP</p>
-            </a>
-            <a id="nav" href="navlog.html">
-                <span class="material-icons" >list</span>
-                <p>Navlog</p>
             </a>
             <a id="pln" href="plnfuel.html">
                 <span class="material-icons" >view_in_ar</span>
@@ -38,8 +38,13 @@
                 <span class="material-icons" >speed</span>
                 <p>Actual Fuel</p>
             </a>
+            <a id="nav" href="navlog.html">
+                <span class="material-icons" >list</span>
+                <p>Navlog</p>
+            </a>
         </div>
     </div>
+    <script src="../Scripts/index.js"></script>
 </body>
 
 </html>
