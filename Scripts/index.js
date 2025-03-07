@@ -51,6 +51,7 @@ function SetSimbriefID(id) {
         sessionStorage.removeItem('flight_data');
         localStorage.removeItem('flight_data');
         document.getElementById("inpID").value = "";
+        document.getElementById("txtFltID").innerHTML = "Flight";
     }
 }
 
@@ -67,6 +68,7 @@ function GetSimbriefOFP() {
         sessionStorage.removeItem('flight_data');
         localStorage.removeItem('flight_data');
         document.getElementById("inpID").value = "";
+        document.getElementById("txtFltID").innerHTML = "Flight";
         return;
     }
     document.getElementById("inpID").value = smbrfID.toString();
@@ -90,15 +92,19 @@ function GetSimbriefOFP() {
                 return response.json();
             })
             .then(data => {
-                localStorage.setItem('flight_data', JSON.stringify(data));
-                sessionStorage.setItem('flight_data', JSON.stringify(data));
-                flightData = data;
+                SetFlightData(data);
             })
             .catch(error => {
                 // Handle any errors that occurred during the fetch
                 console.error('There was a problem with the fetch operation:', error);
             });
     } else {
+        let date = formatDate(flightData.api_params.date);
+        let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+        fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
+        console.log(fltID);
+        document.getElementById("txtFltID").innerHTML = fltID;
+
         sessionStorage.setItem('flight_data', JSON.stringify(flightData));
     }
 }
@@ -111,6 +117,7 @@ function RefreshOFP() {
         sessionStorage.removeItem('flight_data');
         localStorage.removeItem('flight_data');
         document.getElementById("inpID").value = "";
+        document.getElementById("txtFltID").innerHTML = "Flight";
         return;
     }
     console.log("Fetching flightData from Simbrief.");
@@ -129,14 +136,31 @@ function RefreshOFP() {
             return response.json();
         })
         .then(data => {
-            localStorage.setItem('flight_data', JSON.stringify(data));
-            sessionStorage.setItem('flight_data', JSON.stringify(data));
-            flightData = data;
+            SetFlightData(data);
         })
         .catch(error => {
             // Handle any errors that occurred during the fetch
             console.error('There was a problem with the fetch operation:', error);
         });
+}
+
+function formatDate(seconds) {
+    const date = new Date(seconds * 1000);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    return `${day}${month}`;
+}
+
+function SetFlightData(data) {
+    localStorage.setItem('flight_data', JSON.stringify(data));
+    sessionStorage.setItem('flight_data', JSON.stringify(data));
+    flightData = data;
+
+    let date = formatDate(flightData.api_params.date);
+    let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+    fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
+    console.log(fltID);
+    document.getElementById("txtFltID").innerHTML = fltID;
 }
 
 function GetPDF() {
