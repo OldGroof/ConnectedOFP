@@ -220,6 +220,10 @@ iframe {
 }
 
 @media screen and (max-width: 710px) {
+  #inpID {
+    float: left;
+    margin-right: auto;
+  }
   #home {
     float: right;
     margin-left: auto;
