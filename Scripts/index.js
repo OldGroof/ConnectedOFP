@@ -158,7 +158,7 @@ function GetPDF() {
     if (flightData == null || isEmpty(flightData))
         GetFlightDataLocal();
 
-    const dir = flightData.files.directory + flightData.files.pdf.link;
+    const dir = "https://docs.google.com/gview?url=" + flightData.files.directory + flightData.files.pdf.link + "&embedded=true";
     const pfdEmbed = document.getElementById('outPDF');
     pfdEmbed.src = dir;
 }
@@ -177,6 +177,17 @@ function GetFuelPlan() {
     if (fuelData == null || isEmpty(fuelData))
         fuelData = localStorage.getItem('fuel_data');
 
+    if (fuelData == null && flightData == null) {
+        document.getElementById('inpAltns').disabled = true;
+        document.getElementById('butDiscAdd').disabled = true;
+        return;
+    }
+
+    if (fuelData.tank == null)
+        fuelData.tank = 0;
+    if (fuelData.final_ramp == null)
+        fuelData.final_ramp = Number(fuelData.plan_ramp);
+
     if (flightData.params.units == "kgs")
         units = " kg";
     else
@@ -192,6 +203,7 @@ function GetFuelPlan() {
     document.getElementById('txtContFuel').innerHTML = fuelData.contingency + units;
     document.getElementById('txtFinResFuel').innerHTML = fuelData.reserve + units;
     document.getElementById('txtPlnBlkFuel').innerHTML = fuelData.plan_ramp + units;
+    document.getElementById('txtFnlBlkFuel').innerHTML = fuelData.final_ramp + units;
 
     if (fuelData.tank != null && fuelData.tank != "0")
         document.getElementById('inpTankFuel').value = fuelData.tank;
@@ -218,6 +230,18 @@ function GetFuelPlan() {
     }
     if (select.options.length == 0)
         select.disabled = true;
+
+    if (fuelData.discretionary != null) {
+        for (var i = 0; i < fuelData.discretionary.length; i++) {
+            let disc = fuelData.discretionary[i];
+
+            AddDiscRow(i);
+            document.getElementById('inpDiscRes' + i.toString()).value = disc.reason;
+            let inp = document.getElementById('inpDiscFuel' + i.toString());
+            if (disc.amount != "0")
+                inp.value = disc.amount;
+        }
+    }
 }
 
 function UpdateFuelPlan() {
@@ -256,11 +280,130 @@ function UpdateFuelPlan() {
         fuelData.tank = "0";
     }
 
-    // insert disc fuels
+    // update disc fuels
+    if (fuelData.discretionary != null) {
+        for (var i = 0; i < fuelData.discretionary.length; i++) {
+            let discSel = document.getElementById("inpDiscRes" + i.toString());
+            let discInp = document.getElementById("inpDiscFuel" + i.toString());
+
+            discSel.reason = fuelData.discretionary[i].reason;
+            if (discInp.value != "") {
+                fuelData.discretionary[i].amount = discInp.value;
+            } else {
+                fuelData.discretionary[i].amount = "0";
+            }
+        }
+    }
 
     // update final_ramp (includes tank+disc)
+    fuelData.final_ramp = Number(fuelData.plan_ramp) + Number(fuelData.tank);
 
+    let disc = 0;
+    if (fuelData.discretionary != null) {
+        for (var i = 0; i < fuelData.discretionary.length; i++) {
+            disc += Number(fuelData.discretionary[i].amount);
+        }
+    }
 
+    fuelData.final_ramp += disc;
 
+    document.getElementById('txtFnlBlkFuel').innerHTML = fuelData.final_ramp + units;
+
+    localStorage.setItem('fuel_data', JSON.stringify(fuelData));
+}
+
+function AddDiscRow(idx) {
+    var list = document.getElementById('disc_list');
+
+    var newRow = document.createElement('div');
+    newRow.className = 'table-row';
+    newRow.id = "divDisc" + idx.toString();
+
+    var newHeader = document.createElement('h3');
+    newHeader.innerHTML = "Discretionary";
+    newRow.append(newHeader);
+
+    var newSel = document.createElement('select');
+    newSel.id = "inpDiscRes" + idx.toString();
+    newSel.style = "margin-top: auto; margin-bottom: auto;";
+
+    var optDis = document.createElement('option');
+    optDis.disabled = true;
+    optDis.value = "";
+    optDis.innerHTML = "None";
+    optDis.selected = true;
+    optDis.hidden = true;
+    newSel.appendChild(optDis);
+
+    var optWxr = document.createElement('option');
+    optWxr.value = "weather";
+    optWxr.innerHTML = "Weather";
+    newSel.appendChild(optWxr);
+    var optAtc = document.createElement('option');
+    optAtc.value = "atc";
+    optAtc.innerHTML = "ATC"
+    newSel.appendChild(optAtc);
+    var optOthr = document.createElement('option');
+    optOthr.value = "other";
+    optOthr.innerHTML = "Other"
+    newSel.appendChild(optOthr);
+
+    newRow.append(newSel);
+
+    var newDiv = document.createElement('div');
+    newDiv.className = "fuel-inp-div";
+
+    var newInp = document.createElement('input');
+    newInp.id = "inpDiscFuel" + idx.toString();
+    newInp.className = "fuel-inp";
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = "-"
+    newInp.maxLength = "6";
+    newInp.oninput = function () { this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); };
+
+    var newSpan = document.createElement('span');
+    newSpan.id = "spnDiscFuel" + idx.toString();
+    newSpan.className = "fuel-inp-span";
+    if (units == " kg")
+        newSpan.innerHTML = "kg";
+    else
+        newSpan.innerHTML = "lb";
+
+    newDiv.appendChild(newInp);
+    newDiv.appendChild(newSpan);
+
+    newRow.appendChild(newDiv);
+
+    list.appendChild(newRow);
+
+    newSel.addEventListener('change', function (event) {
+        UpdateDiscReason(idx, newSel.value);
+    });
+    newInp.addEventListener("keyup", UpdateFuelPlan);
+}
+
+function AddDiscFuel() {
+    if (fuelData.discretionary == null)
+        fuelData.discretionary = new Array
+
+    let obj = {
+        reason: "",
+        amount: "0"
+    };
+    fuelData.discretionary.push(obj);
+
+    AddDiscRow(fuelData.discretionary.length - 1);
+
+    const div = document.getElementById('divFuel');
+    div.scrollTop = div.scrollHeight;
+
+    localStorage.setItem('fuel_data', JSON.stringify(fuelData));
+}
+
+function UpdateDiscReason(idx, value) {
+    if (value == "") return;
+
+    fuelData.discretionary[idx].reason = value.toString();
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 }

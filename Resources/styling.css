@@ -96,6 +96,14 @@
   margin-bottom: auto;
 }
 
+.fuel-inp-div {
+  float: right;
+  margin-left: auto;
+  margin-right: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .fuel-inp {
   padding-right: 24px;
   font-size: 20px;
@@ -107,8 +115,15 @@
   outline: none;
   cursor: text;
 }
+
 .fuel-inp:focus {
   outline: none;
+}
+
+.fuel-inp-span {
+  font-size: 20px;
+  font-weight: 350;
+  margin-left: -20px;
 }
 
 select {
@@ -116,6 +131,17 @@ select {
   color: rgb(78, 78, 78);
   margin-left: 15px;
 }
+
+.disc-button {
+  float: right;
+  font-size: 20px;
+  color: rgb(78, 78, 78);
+  margin-left: auto;
+  margin-right: 15px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
 select:focus {
   outline: none;
 }
@@ -279,6 +305,7 @@ iframe {
     float: left;
     margin-right: auto;
   }
+
   #home {
     float: right;
     margin-left: auto;

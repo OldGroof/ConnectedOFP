@@ -23,7 +23,7 @@
     <div class="bar" style="margin-top: 84px; display: flex; justify-content: center; height: calc(100vh - 185px);">
         <div style="width: 100%; display: flex; justify-content: center;">
             <div class="column">
-                <div style="overflow-y: scroll; height: calc(100% - 53px);">
+                <div id="divFuel" style="overflow-y: scroll; height: calc(100% - 53px);">
                     <div class="table-row">
                         <h3>Taxi</h3>
                         <p class="fuel-val" id="txtTaxiFuel">- kg</p>
@@ -51,16 +51,19 @@
                     </div>
                     <div class="table-row">
                         <h3>Tankering</h3>
-                        <div style="float: right; margin-left: auto; margin-right: 15px; margin-top: auto; margin-bottom: auto;">
-                            <input id="inpTankFuel" class="fuel-inp" type="text" inputmode="numeric" placeholder="-" maxlength="4"
+                        <div class="fuel-inp-div">
+                            <input id="inpTankFuel" class="fuel-inp" type="text" inputmode="numeric" placeholder="-" maxlength="6"
                             oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </input>
                             <span id="spnTankFuel" class style="font-size: 20px; font-weight: 350; margin-left:-24px;">kg</span>
                         </div>
                     </div>
+                    <div id = "disc_list"></div>
+                    <button id="butDiscAdd" class="disc-button" onclick="AddDiscFuel()">DISC +</button>
                 </div>
                 <div class="table-row" style="position: relative; bottom: 0; width: 100%; background-color: rgb(238, 238, 238);">
                     <h3 style="font-weight: 500;">FINAL BLK</h3>
+                    <p class="fuel-val" id="txtFnlBlkFuel">- kg</p>
                 </div>
             </div>
             <div class="column" style="background-color: rgb(238, 238, 238);">
