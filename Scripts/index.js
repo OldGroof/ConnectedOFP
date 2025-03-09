@@ -179,6 +179,7 @@ function GetFuelPlan() {
 
     if (fuelData == null && flightData == null) {
         document.getElementById('inpAltns').disabled = true;
+        document.getElementById('inpTankFuel').disabled = true;
         document.getElementById('butDiscAdd').disabled = true;
         return;
     }
