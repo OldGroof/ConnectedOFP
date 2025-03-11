@@ -285,33 +285,16 @@ iframe {
   width: 100%;
 }
 
-/* Responsive layout - makes a one column-layout instead of a two-column layout */
-@media screen and (max-width: 990px) {
-  .index-row {
-    flex-wrap: wrap;
-  }
-
-  .index-column {
-    flex: 100%;
-  }
-
-  .column {
-    flex: 100%;
-  }
-}
-
 @media screen and (max-width: 768px) {
   #inpID {
     float: left;
     margin-right: auto;
   }
 
-  #home {
-    float: right;
-    margin-left: auto;
-  }
-
   .row {
     flex-wrap: wrap;
+  }
+  .column {
+    flex: 100%;
   }
 }
