@@ -319,6 +319,10 @@ function AddDiscRow(idx) {
     newRow.className = 'table-row';
     newRow.id = "divDisc" + idx.toString();
 
+    var newDel = document.createElement('a');
+    newDel.className = 'close'
+    newRow.append(newDel);
+
     var newHeader = document.createElement('h3');
     newHeader.innerHTML = "Discretionary";
     newRow.append(newHeader);
@@ -381,6 +385,10 @@ function AddDiscRow(idx) {
         UpdateDiscReason(idx, newSel.value);
     });
     newInp.addEventListener("keyup", UpdateFuelPlan);
+
+    newDel.addEventListener("click", function (event) {
+        RemoveDiscFuel(idx);
+    });
 }
 
 function AddDiscFuel() {
@@ -399,6 +407,28 @@ function AddDiscFuel() {
     div.scrollTop = div.scrollHeight;
 
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
+}
+
+function RemoveDiscFuel(idx) {
+    console.log("RemoveDiscFuel", idx)
+
+    for (var i = 0; i < fuelData.discretionary.length; i++) {
+        const element = document.getElementById("divDisc" + i.toString());
+        element.remove();
+    }
+
+    fuelData.discretionary.splice(idx, 1);
+
+    for (var i = 0; i < fuelData.discretionary.length; i++) {
+        let disc = fuelData.discretionary[i];
+
+        AddDiscRow(i);
+        document.getElementById('inpDiscRes' + i.toString()).value = disc.reason;
+        let inp = document.getElementById('inpDiscFuel' + i.toString());
+        if (disc.amount != "0")
+            inp.value = disc.amount;
+    }
+    UpdateFuelPlan();
 }
 
 function UpdateDiscReason(idx, value) {
