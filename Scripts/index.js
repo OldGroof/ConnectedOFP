@@ -71,7 +71,12 @@ function GetSimbriefOFP() {
         FetchSimbriefAPI();
     } else {
         let date = FormatDate(flightData.api_params.date);
-        let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+        let fltID = "Flight - ";
+        if (!isEmpty(flightData.general.icao_airline))
+            fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+        else
+            fltID = "Flight - " + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+
         fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
         console.log(fltID);
         document.getElementById("txtFltID").innerHTML = fltID;
@@ -106,7 +111,12 @@ function SetFlightData(data) {
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 
     let date = FormatDate(flightData.api_params.date);
-    let fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+    let fltID = "Flight - ";
+    if (!isEmpty(flightData.general.icao_airline))
+        fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+    else
+        fltID = "Flight - " + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+
     fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
     console.log(fltID);
     document.getElementById("txtFltID").innerHTML = fltID;
