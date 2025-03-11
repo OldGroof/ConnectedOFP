@@ -71,11 +71,6 @@
   background: rgb(240, 247, 251);
 }
 
-.column {
-  flex: 50%;
-  padding: 0px;
-}
-
 .table-row {
   width: 100%;
   display: flex;
@@ -150,8 +145,12 @@ select:focus {
 .row {
   display: flex;
   width: 100%;
-  display: flex;
   justify-content: center;
+}
+
+.column {
+  flex: 50%;
+  padding: 0px;
 }
 
 body,
