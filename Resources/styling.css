@@ -330,6 +330,65 @@ iframe {
   color: rgb(78, 78, 78);
 }
 
+.leg-list {
+  background-color: rgb(238, 238, 238);
+  padding: 5px;
+  overflow-y: scroll;
+  height: calc(100% - 10px);
+  border-radius: 5px;
+}
+
+.leg-row {
+  width: calc(100% - 10px);
+  padding: 10px 5px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  background-color: white;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px 4px lightgray;
+}
+
+.leg-name {
+  width: 50%;
+  padding-left: 5px;
+  float: left;
+  margin-right: auto;
+  font-size: 26px;
+  font-weight: 450;
+  text-align: left;
+  border-right: solid;
+  border-width: 2px;
+}
+
+.leg-box {
+  width: 25%;
+  border: solid;
+  border-width: 1px;
+  font-size: 26px;
+  font-weight: 350;
+  text-align: left;
+  padding-inline: 5px;
+}
+
+.leg-row label {
+  font-size: 15px;
+  font-weight: 250;
+  text-align: left;
+}
+
+.leg-row input {
+  width: 100%;
+  font-size: 26px;
+  cursor: text;
+  border: none;
+  background-color: transparent;
+  outline: none;
+}
+
+.leg-row input:focus {
+  outline: none;
+}
+
 @media screen and (max-width: 968px) {
   .row {
     flex-wrap: wrap;
@@ -351,37 +410,47 @@ iframe {
     background-color: rgb(28, 28, 30);
     color: rgb(238, 238, 238);
   }
+
   .header {
     color: rgb(238, 238, 238);
     background-color: rgb(58, 58, 60);
     box-shadow: 0px 0px 10px 4px #111111;
   }
+
   .header input {
     color: rgb(238, 238, 238);
   }
+
   .header a {
     color: rgb(238, 238, 238);
   }
+
   .header a:hover {
     background: rgb(99, 99, 102);
   }
+
   .footer {
     background-color: rgb(58, 58, 60);
     box-shadow: 0px 0px 10px 4px #111111;
   }
+
   .footer a {
     color: rgb(238, 238, 238);
   }
+
   .footer a:hover {
     background: rgb(99, 99, 102);
   }
+
   .bar {
     background-color: rgb(58, 58, 60);
     box-shadow: 0px 0px 10px 4px #111111;
   }
+
   .index-button {
     color: rgb(238, 238, 238);
   }
+
   .index-button:hover {
     background: rgb(99, 99, 102);
   }
@@ -390,14 +459,30 @@ iframe {
     background-color: rgb(58, 58, 60);
     box-shadow: 0px 0px 10px 4px #111111;
   }
+
   .table-row-imp {
     background-color: rgb(99, 99, 102);
   }
+
   .fuel-inp {
     color: rgb(238, 238, 238);
   }
+
   .close:after,
   .close:before {
     background-color: rgb(238, 238, 238);
+  }
+
+  .leg-list {
+    background-color: rgb(28, 28, 30);
+  }
+
+  .leg-row {
+    background-color: rgb(58, 58, 60);
+    box-shadow: 0px 0px 10px 4px #111111;
+  }
+
+  .leg-row input {
+    color: rgb(238, 238, 238);
   }
 }

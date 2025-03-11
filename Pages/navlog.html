@@ -12,12 +12,15 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body>
+<body onload="GetNavLog()">
     <div class="header" style="z-index: 5">
-        <div class="row">
-            <h1>Navlog</h1>
-            <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span class="material-icons" >home</span></a>
-        </div>
+        <h1>Navlog</h1>
+        <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span
+                class="material-icons">home</span></a>
+    </div>
+
+    <div class="bar" style="margin-top: 84px; height: calc(100vh - 185px);">
+        <div id="legList" class="leg-list"></div>
     </div>
 
     <div class="footer" style="z-index: 5">
@@ -40,6 +43,9 @@
             </a>
         </div>
     </div>
+
+    <div style="height: 65px;"></div>
+    <script src="../Scripts/index.js"></script>
 </body>
 
 </html>

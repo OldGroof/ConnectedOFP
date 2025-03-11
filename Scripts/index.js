@@ -14,6 +14,8 @@ var units = " kg"
 var flightData = JSON.parse(sessionStorage.getItem('flight_data'));
 var fuelData = JSON.parse(localStorage.getItem('fuel_data'));
 
+var liveData = {};
+
 function setCookie(cname, cvalue, exdays) {
     const d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
@@ -534,4 +536,184 @@ function UpdateLWGauge(val, max_val) {
 
     el = document.getElementById('txtLW');
     el.innerHTML = percent + "%";
+}
+
+function GetNavLog() {
+    if (flightData == null || isEmpty(flightData))
+        GetFlightDataLocal();
+    if (fuelData == null || isEmpty(fuelData))
+        fuelData = localStorage.getItem('fuel_data');
+
+    if (flightData == null || fuelData == null) return;
+
+    liveData = localStorage.getItem('live_data');
+    
+    let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
+    let atd = std;
+
+    for (let i = 0; i < flightData.navlog.fix.length; i++) {
+        let leg = flightData.navlog.fix[i];
+
+        AddLegRow(std, atd, leg);
+    }
+}
+
+function FormatLegTime(seconds) {
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.ceil((seconds % 3600) / 60);
+    let HH = String(hours).padStart(2, '0');
+    let MM = String(minutes).padStart(2, '0');
+    return `${HH}${MM}`;
+}
+function FormatToSeconds(timeStr) {
+    if (!/^\d{4}$/.test(timeStr)) {
+        throw new Error("Invalid time format. Use 'HHMM'.");
+    }
+    
+    let hours = parseInt(timeStr.substring(0, 2), 10);
+    let minutes = parseInt(timeStr.substring(2, 4), 10);
+    
+    return (hours * 3600) + (minutes * 60);
+}
+
+function AddLegRow(std, atd, leg) {
+    var list = document.getElementById('legList');
+
+    var newRow = document.createElement('div');
+    newRow.className = 'leg-row';
+
+    var newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    var newName = document.createElement('div');
+    newName.className = 'leg-name'
+    newName.innerHTML = leg.name;
+    newDiv.appendChild(newName);
+
+    newName = document.createElement('div');
+    newName.className = 'leg-name'
+    newName.innerHTML = leg.ident;
+    newName.style = 'border-right: none;';
+    newDiv.appendChild(newName);
+
+    newRow.append(newDiv);
+
+    newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    var newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    var newLabel = document.createElement('label');
+    newLabel.innerHTML = 'EET';
+    newBox.appendChild(newLabel);
+    var newP = document.createElement('p');
+    newP.innerHTML = FormatLegTime(leg.time_leg);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'ETO';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+
+    let eto = std + Number(leg.time_total);
+    while (eto >= 86400)
+        eto -= 86400;
+    newP.innerHTML = FormatLegTime(eto);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'EFOB';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = leg.fuel_plan_onboard;
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'MFOB';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = leg.fuel_min_onboard;
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newRow.append(newDiv);
+
+    newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'TTLT';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = FormatLegTime(leg.time_total);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'ATO';
+    newBox.appendChild(newLabel);
+    let newInp = document.createElement('input');
+    newInp.type = 'text';
+    newInp.inputMode = 'numeric';
+    newInp.placeholder= '-';
+    newInp.maxLength = '4';
+    newInp.oninput = function () { 
+        this.value = this.value.replace(/[^0-9]/g, ''); // Allow only numbers
+    
+        let numValue = parseInt(this.value, 10);
+    
+        // Ensure the value is not greater than 2359 and follows HHMM format
+        if (numValue > 2359 || (this.value.length >= 2 && parseInt(this.value.slice(2), 10) >= 60)) {
+            this.value = this.value.slice(0, -1); // Remove last digit if invalid
+        }
+    };
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'AFOB';
+    newBox.appendChild(newLabel);
+    newInp = document.createElement('input');
+    newInp.type = 'text';
+    newInp.inputMode = 'numeric';
+    newInp.placeholder= '-';
+    newInp.maxLength = '6';
+    newInp.oninput = function () { 
+        this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); 
+    };
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newLabel = document.createElement('label');
+    newLabel.innerHTML = 'FPETO';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+
+    let fpeto = atd + Number(leg.time_total);
+    while (fpeto >= 86400)
+        efpetoo -= 86400;
+    newP.innerHTML = FormatLegTime(fpeto);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newRow.append(newDiv);
+
+    list.appendChild(newRow);
 }
