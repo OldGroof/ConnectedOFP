@@ -38,6 +38,7 @@
   background-color: transparent;
   outline: none;
 }
+
 .header input:focus {
   outline: none;
 }
@@ -198,6 +199,15 @@ h3 {
   box-shadow: 0px 0px 10px 4px lightgrey;
 }
 
+.fuel-bar {
+  height: calc(100vh - 185px);
+  margin: 15px 20px;
+  padding: 10px;
+  background-color: rgb(255, 255, 255);
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px 4px lightgrey;
+}
+
 .index-button {
   display: block;
   width: 50%;
@@ -242,10 +252,13 @@ iframe {
   opacity: 0.3;
   cursor: pointer;
 }
+
 .close:hover {
   opacity: 1;
 }
-.close:before, .close:after {
+
+.close:before,
+.close:after {
   position: absolute;
   left: 15px;
   content: ' ';
@@ -253,23 +266,26 @@ iframe {
   width: 2px;
   background-color: #333;
 }
+
 .close:before {
   transform: rotate(45deg);
 }
+
 .close:after {
   transform: rotate(-45deg);
 }
 
-.gauge{
+.gauge {
   height: 85px;
   /*overflow: hidden;*/
   position: relative;
   width: 170px;
 }
-.gauge .arc{
+
+.gauge .arc {
   background-image:
-      radial-gradient(#fff 0, #fff 60%, transparent 60%),
-      conic-gradient(green 0deg,#ccc 0deg);
+    radial-gradient(#fff 0, #fff 60%, transparent 60%),
+    conic-gradient(green 0deg, #ccc 0deg);
   background-position: center center, center center;
   background-repeat: no-repeat;
   background-size: 105% 105%, 105% 105%;
@@ -279,7 +295,8 @@ iframe {
   position: relative;
   width: 100%;
 }
-.gauge .label{
+
+.gauge .label {
   bottom: 0px;
   font-size: 26px;
   font-weight: 350;
@@ -289,7 +306,8 @@ iframe {
   text-align: center;
   width: 100%;
 }
-.gauge .val{
+
+.gauge .val {
   bottom: -26px;
   font-size: 26px;
   font-weight: 700;
@@ -304,7 +322,14 @@ iframe {
   .row {
     flex-wrap: wrap;
   }
+
   .column {
     flex: 100%;
+  }
+
+  .fuel-bar {
+    position: relative;
+    height: auto;
+    min-height: 100% !important;
   }
 }
