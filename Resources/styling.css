@@ -260,7 +260,7 @@ iframe {
   transform: rotate(-45deg);
 }
 
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 968px) {
   .row {
     flex-wrap: wrap;
   }
