@@ -131,17 +131,12 @@
 }
 
 select {
-  padding: 5px;
   font-size: 20px;
   color: rgb(78, 78, 78);
   margin-left: 15px;
-  cursor: pointer;
-  border-radius: 50vh;
-  border: none;
 }
 
 .disc-button {
-  padding: 5px;
   float: right;
   font-size: 20px;
   color: rgb(78, 78, 78);
@@ -149,10 +144,6 @@ select {
   margin-right: 15px;
   margin-top: 5px;
   margin-bottom: 5px;
-  background-color: white;
-  cursor: pointer;
-  border-radius: 50vh;
-  border: none;
 }
 
 select:focus {
@@ -408,13 +399,5 @@ iframe {
   .close:after,
   .close:before {
     background-color: rgb(238, 238, 238);
-  }
-  .disc-button {
-    color: rgb(238, 238, 238);
-    background-color: rgb(99, 99, 102);
-  }
-  select {
-    color: rgb(238, 238, 238);
-    background-color: rgb(99, 99, 102);
   }
 }
