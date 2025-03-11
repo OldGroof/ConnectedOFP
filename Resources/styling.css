@@ -149,6 +149,9 @@ select:focus {
 
 .row {
   display: flex;
+  width: 100%;
+  display: flex;
+  justify-content: center;
 }
 
 body,
@@ -292,16 +295,12 @@ iframe {
     flex: 100%;
   }
 
-  .row {
-    flex-wrap: wrap;
-  }
-
   .column {
     flex: 100%;
   }
 }
 
-@media screen and (max-width: 710px) {
+@media screen and (max-width: 768px) {
   #inpID {
     float: left;
     margin-right: auto;
@@ -310,5 +309,9 @@ iframe {
   #home {
     float: right;
     margin-left: auto;
+  }
+
+  .row {
+    flex-wrap: wrap;
   }
 }
