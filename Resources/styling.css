@@ -333,3 +333,17 @@ iframe {
     min-height: 100% !important;
   }
 }
+
+@media (prefers-color-scheme: light) {
+  .header {
+    color: rgb(58, 58, 60);
+    background-color: white;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  .element {
+    color: white;
+    background-color: black;
+  }
+}
