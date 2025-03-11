@@ -260,6 +260,46 @@ iframe {
   transform: rotate(-45deg);
 }
 
+.gauge{
+  height: 85px;
+  /*overflow: hidden;*/
+  position: relative;
+  width: 170px;
+}
+.gauge .arc{
+  background-image:
+      radial-gradient(#fff 0, #fff 60%, transparent 60%),
+      conic-gradient(green 0deg,#ccc 0deg);
+  background-position: center center, center center;
+  background-repeat: no-repeat;
+  background-size: 105% 105%, 105% 105%;
+  border-radius: 50%;
+  border-style: none;
+  height: 170px;
+  position: relative;
+  width: 100%;
+}
+.gauge .label{
+  bottom: 0px;
+  font-size: 26px;
+  font-weight: 350;
+  left: 0;
+  line-height: 26px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+.gauge .val{
+  bottom: -26px;
+  font-size: 26px;
+  font-weight: 700;
+  left: 0;
+  line-height: 26px;
+  position: absolute;
+  text-align: center;
+  width: 100%;
+}
+
 @media screen and (max-width: 968px) {
   .row {
     flex-wrap: wrap;

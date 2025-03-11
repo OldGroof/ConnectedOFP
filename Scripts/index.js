@@ -242,6 +242,17 @@ function GetFuelPlan() {
                 inp.value = disc.amount;
         }
     }
+
+    let zfw = Number(flightData.weights.est_zfw);
+    flightData.weights.est_tow = zfw + (Number(fuelData.final_ramp) - Number(fuelData.taxi));
+    flightData.weights.est_ldw = Number(flightData.weights.est_tow) - Number(fuelData.enroute_burn);
+
+    UpdateZFWGauge(flightData.weights.est_zfw, flightData.weights.max_zfw);
+    UpdateTOWGauge(flightData.weights.est_tow, flightData.weights.max_tow);
+    UpdateLWGauge(flightData.weights.est_ldw, flightData.weights.max_ldw);
+
+    localStorage.setItem('flight_data', JSON.stringify(flightData));
+    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
 }
 
 function UpdateFuelPlan() {
@@ -309,6 +320,16 @@ function UpdateFuelPlan() {
 
     document.getElementById('txtFnlBlkFuel').innerHTML = fuelData.final_ramp + units;
 
+    let zfw = Number(flightData.weights.est_zfw);
+    flightData.weights.est_tow = zfw + (Number(fuelData.final_ramp) - Number(fuelData.taxi));
+    flightData.weights.est_ldw = Number(flightData.weights.est_tow) - Number(fuelData.enroute_burn);
+
+    UpdateZFWGauge(flightData.weights.est_zfw, flightData.weights.max_zfw);
+    UpdateTOWGauge(flightData.weights.est_tow, flightData.weights.max_tow);
+    UpdateLWGauge(flightData.weights.est_ldw, flightData.weights.max_ldw);
+
+    localStorage.setItem('flight_data', JSON.stringify(flightData));
+    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 }
 
@@ -436,4 +457,71 @@ function UpdateDiscReason(idx, value) {
 
     fuelData.discretionary[idx].reason = value.toString();
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
+}
+
+function UpdateZFWGauge(val, max_val) {
+    let percent = (Number(val) / Number(max_val)) * 100;
+    percent = Math.round(percent);
+
+    let ang = 360 * (percent / 100);
+
+    let colour = "green";
+    if (percent >= 90)
+        colour = "orange"
+    if (percent > 100) {
+        colour = "red";
+        ang = 360;
+    }
+
+    let el = document.getElementById('arcZFW')
+    el.style.backgroundImage =
+        `radial-gradient(#fff 0, #fff 60%, transparent 60%), 
+         conic-gradient(${colour} ${ang}deg, #ccc ${ang}deg)`;
+
+    el = document.getElementById('txtZFW');
+    el.innerHTML = percent + "%";
+}
+function UpdateTOWGauge(val, max_val) {
+    let percent = (Number(val) / Number(max_val)) * 100;
+    percent = Math.round(percent);
+
+    let ang = 360 * (percent / 100);
+
+    let colour = "green";
+    if (percent >= 90)
+        colour = "orange"
+    if (percent > 100) {
+        colour = "red";
+        ang = 360;
+    }
+
+    let el = document.getElementById('arcTOW')
+    el.style.backgroundImage =
+        `radial-gradient(#fff 0, #fff 60%, transparent 60%), 
+         conic-gradient(${colour} ${ang}deg, #ccc ${ang}deg)`;
+
+    el = document.getElementById('txtTOW');
+    el.innerHTML = percent + "%";
+}
+function UpdateLWGauge(val, max_val) {
+    let percent = (Number(val) / Number(max_val)) * 100;
+    percent = Math.round(percent);
+
+    let ang = 360 * (percent / 100);
+
+    let colour = "green";
+    if (percent >= 90)
+        colour = "orange"
+    if (percent > 100) {
+        colour = "red";
+        ang = 360;
+    }
+
+    let el = document.getElementById('arcLW')
+    el.style.backgroundImage =
+        `radial-gradient(#fff 0, #fff 60%, transparent 60%), 
+         conic-gradient(${colour} ${ang}deg, #ccc ${ang}deg)`;
+
+    el = document.getElementById('txtLW');
+    el.innerHTML = percent + "%";
 }

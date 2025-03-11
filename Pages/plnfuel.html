@@ -16,7 +16,8 @@
     <div class="header" style="z-index: 5">
         <div class="row">
             <h1 id="txtPageTitle">Fuel Planning</h1>
-            <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span class="material-icons" >home</span></a>
+            <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span
+                    class="material-icons">home</span></a>
         </div>
     </div>
 
@@ -52,22 +53,43 @@
                     <div class="table-row">
                         <h3>Tankering</h3>
                         <div class="fuel-inp-div">
-                            <input id="inpTankFuel" class="fuel-inp" type="text" inputmode="numeric" placeholder="-" maxlength="6"
-                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            <input id="inpTankFuel" class="fuel-inp" type="text" inputmode="numeric" placeholder="-"
+                                maxlength="6"
+                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </input>
-                            <span id="spnTankFuel" class style="font-size: 20px; font-weight: 350; margin-left:-24px;">kg</span>
+                            <span id="spnTankFuel" class
+                                style="font-size: 20px; font-weight: 350; margin-left:-24px;">kg</span>
                         </div>
                     </div>
-                    <div id = "disc_list"></div>
+                    <div id="disc_list"></div>
                     <button id="butDiscAdd" class="disc-button" onclick="AddDiscFuel()">DISC +</button>
                 </div>
-                <div class="table-row" style="position: relative; bottom: 0; width: 100%; background-color: rgb(238, 238, 238);">
+                <div class="table-row"
+                    style="position: relative; bottom: 0; width: 100%; background-color: rgb(238, 238, 238);">
                     <h3 style="font-weight: 500;">FINAL BLK</h3>
                     <p class="fuel-val" id="txtFnlBlkFuel">- kg</p>
                 </div>
             </div>
             <div class="column" style="background-color: rgb(238, 238, 238);">
-                
+                <div class="row" style="height: 170px;">
+                    <div class="gauge" style="margin-inline: auto;">
+                        <div id="arcTOW" class="arc"></div>
+                        <div class="label">TOW</div>
+                        <div id="txtTOW" class="val">0%</div>
+                    </div>
+                    <div class="gauge" style="margin-inline: auto;">
+                        <div id="arcLW" class="arc"></div>
+                        <div class="label">LW</div>
+                        <div id="txtLW" class="val">0%</div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="gauge">
+                        <div id="arcZFW" class="arc"></div>
+                        <div class="label">ZFW</div>
+                        <div id="txtZFW" class="val">0%</div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -75,19 +97,19 @@
     <div class="footer" style="z-index: 5">
         <div style="display: flex; justify-content: center;">
             <a id="ofp" href="pdf.html">
-                <span class="material-icons" >receipt_long</span>
+                <span class="material-icons">receipt_long</span>
                 <p>OFP</p>
             </a>
             <a id="pln" href="plnfuel.html">
-                <span class="material-icons" >view_in_ar</span>
+                <span class="material-icons">view_in_ar</span>
                 <p>Fuel Plan</p>
             </a>
             <a id="act" href="actfuel.html">
-                <span class="material-icons" >speed</span>
+                <span class="material-icons">speed</span>
                 <p>Actual Fuel</p>
             </a>
             <a id="nav" href="navlog.html">
-                <span class="material-icons" >list</span>
+                <span class="material-icons">list</span>
                 <p>Navlog</p>
             </a>
         </div>
