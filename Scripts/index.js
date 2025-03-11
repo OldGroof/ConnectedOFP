@@ -10,7 +10,6 @@ if (inputElement != null) {
 }
 
 var smbrfID = "";
-
 var units = " kg"
 var flightData = JSON.parse(sessionStorage.getItem('flight_data'));
 var fuelData = JSON.parse(localStorage.getItem('fuel_data'));
