@@ -195,53 +195,6 @@ h3 {
   overflow: hidden;
 }
 
-.text-left {
-  text-align: left;
-}
-
-.text-center {
-  text-align: center;
-}
-
-.text-table {
-  font-size: medium;
-  text-align: center;
-}
-
-.text-masses {
-  padding: 15px;
-  font-size: 16px;
-  text-align: center;
-  font-weight: bold;
-}
-
-/* The container */
-.container {
-  display: block;
-  position: relative;
-  padding-left: 35px;
-  cursor: pointer;
-  font-size: 18px;
-  height: 33px;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
-
-.index-row {
-  margin: 15px 30px;
-  display: flex;
-}
-
-.index-column {
-  flex: 50%;
-  padding: 15px;
-  background-color: #d5dadd;
-  border-radius: 4px;
-  margin: 15px 10px;
-}
-
 .bar {
   margin: 15px 20px;
   padding: 10px;
