@@ -354,7 +354,7 @@ iframe {
   .header {
     color: rgb(238, 238, 238);
     background-color: rgb(58, 58, 60);
-    box-shadow: 0px 0px 10px 4px #1b1b1b;
+    box-shadow: 0px 0px 10px 4px #111111;
   }
   .header input {
     color: rgb(238, 238, 238);
@@ -367,7 +367,7 @@ iframe {
   }
   .footer {
     background-color: rgb(58, 58, 60);
-    box-shadow: 0px 0px 10px 4px #1b1b1b;
+    box-shadow: 0px 0px 10px 4px #111111;
   }
   .footer a {
     color: rgb(238, 238, 238);
@@ -377,7 +377,7 @@ iframe {
   }
   .bar {
     background-color: rgb(58, 58, 60);
-    box-shadow: 0px 0px 10px 4px #1b1b1b;
+    box-shadow: 0px 0px 10px 4px #111111;
   }
   .index-button {
     color: rgb(238, 238, 238);
@@ -388,7 +388,7 @@ iframe {
 
   .fuel-bar {
     background-color: rgb(58, 58, 60);
-    box-shadow: 0px 0px 10px 4px #1b1b1b;
+    box-shadow: 0px 0px 10px 4px #111111;
   }
   .table-row-imp {
     background-color: rgb(99, 99, 102);
