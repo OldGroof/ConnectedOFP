@@ -1,4 +1,5 @@
 .header {
+  display: flex;
   overflow: hidden;
   background-color: rgb(255, 255, 255);
   position: fixed;
@@ -7,10 +8,6 @@
   height: 60px;
   color: rgb(78, 78, 78);
   box-shadow: 0px 0px 10px 4px lightgray;
-}
-
-.header h1 {
-  margin: 10px 5px;
 }
 
 .header a {
@@ -28,11 +25,12 @@
 }
 
 .header input {
-  float: left;
-  display: block;
+  float: right;
+  margin-left: auto;
+  padding: 18px 17px;
+
   color: rgb(78, 78, 78);
   text-align: center;
-  padding: 18px 17px;
   text-decoration: none;
   font-size: 18px;
   cursor: text;
@@ -40,7 +38,6 @@
   background-color: transparent;
   outline: none;
 }
-
 .header input:focus {
   outline: none;
 }
@@ -175,7 +172,6 @@ h1 {
   text-align: left;
   white-space: nowrap;
   overflow: hidden;
-  text-overflow: ellipsis;
 }
 
 h2 {
