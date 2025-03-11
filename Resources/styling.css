@@ -238,11 +238,6 @@ iframe {
 }
 
 @media screen and (max-width: 768px) {
-  #inpID {
-    float: left;
-    margin-right: auto;
-  }
-
   .row {
     flex-wrap: wrap;
   }
