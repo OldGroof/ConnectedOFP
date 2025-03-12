@@ -637,6 +637,10 @@ function GetLiveData() {
     inp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             liveData.on_time = this.value;
+
+            let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
+            UpdateLegTime(last_leg, Number(this.value));
+
             UpdateNavLog();
             this.blur();
         }
