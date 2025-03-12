@@ -330,12 +330,30 @@ iframe {
   color: rgb(78, 78, 78);
 }
 
+.act-inp {
+  float: right;
+  margin-left: auto;
+  font-size: 20px;
+  text-align: right;
+  font-weight: 350;
+  color: rgb(78, 78, 78);
+  background-color: transparent;
+  border: none;
+  outline: none;
+  cursor: text;
+}
+
+.inp-inp:focus {
+  outline: none;
+}
+
 .leg-list {
   background-color: rgb(238, 238, 238);
   padding: 5px;
   overflow-y: scroll;
   height: calc(100% - 10px);
   border-radius: 5px;
+  list-style: none;
 }
 
 .leg-row {
@@ -343,6 +361,7 @@ iframe {
   padding: 10px 5px;
   margin-top: 10px;
   margin-bottom: 10px;
+  scroll-margin-top: 5px;
   background-color: white;
   border-radius: 5px;
   box-shadow: 0px 0px 10px 4px lightgray;
@@ -361,6 +380,8 @@ iframe {
 }
 
 .leg-box {
+  position: relative;
+  display: inline-block;
   width: 25%;
   border: solid;
   border-width: 1px;
@@ -370,7 +391,7 @@ iframe {
   padding-inline: 5px;
 }
 
-.leg-row label {
+.leg-row-label {
   font-size: 15px;
   font-weight: 250;
   text-align: left;
@@ -387,6 +408,15 @@ iframe {
 
 .leg-row input:focus {
   outline: none;
+}
+
+.leg-row-inp-lbl {
+  font-size: 20px;
+  font-weight: 350;
+  position: absolute;
+  bottom: 0px;
+  right: 10px;
+  pointer-events: none;
 }
 
 @media screen and (max-width: 968px) {
@@ -471,6 +501,10 @@ iframe {
   .close:after,
   .close:before {
     background-color: rgb(238, 238, 238);
+  }
+
+  .act-inp {
+    color: rgb(238, 238, 238);
   }
 
   .leg-list {

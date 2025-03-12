@@ -12,11 +12,40 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body>
+<body onload="GetLiveData()">
     <div class="header" style="z-index: 5">
         <h1>Actual Fuel</h1>
         <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span
                 class="material-icons">home</span></a>
+    </div>
+
+    <div class="bar" style="margin-top: 84px; ">
+        <div style="display: flex; width: 100%;">
+            <h3 style="float: left;">Actual Fuel</h3>
+            <input id="inpActFuel" class="act-inp" type="text" inputmode="numeric" placeholder="Actual Fuel" maxlength="6"
+                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+            </input>
+        </div>
+        <div style="display: flex; width: 100%;">
+            <h3 style="float: left;">Out</h3>
+            <input id="inpOut" class="act-inp" type="text" inputmode="numeric" placeholder="Out Time" maxlength="4">
+            </input>
+        </div>
+        <div style="display: flex; width: 100%;">
+            <h3 style="float: left;">Off</h3>
+            <input id="inpOff" class="act-inp" type="text" inputmode="numeric" placeholder="Off Time" maxlength="4">
+            </input>
+        </div>
+        <div style="display: flex; width: 100%;">
+            <h3 style="float: left;">On</h3>
+            <input id="inpOn" class="act-inp" type="text" inputmode="numeric" placeholder="On Time" maxlength="4">
+            </input>
+        </div>
+        <div style="display: flex; width: 100%;">
+            <h3 style="float: left;">In</h3>
+            <input id="inpIn" class="act-inp" type="text" inputmode="numeric" placeholder="In Time" maxlength="4">
+            </input>
+        </div>
     </div>
 
     <div class="footer" style="z-index: 5">
@@ -39,6 +68,7 @@
             </a>
         </div>
     </div>
+    <script src="../Scripts/index.js"></script>
 </body>
 
 </html>
