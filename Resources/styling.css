@@ -434,6 +434,10 @@ iframe {
     height: auto;
     min-height: 100% !important;
   }
+
+  .footer a {
+    font-size: 14px;
+  }
 }
 
 @media (prefers-color-scheme: dark) {
