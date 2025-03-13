@@ -44,7 +44,6 @@
 }
 
 .footer {
-  min-width: 500px;
   position: fixed;
   background-color: rgb(255, 255, 255);
   height: 65px;
