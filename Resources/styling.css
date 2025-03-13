@@ -170,7 +170,6 @@ p {
 }
 
 body {
-  min-width: 500px;
   background: rgb(238, 238, 238);
   color: rgb(78, 78, 78);
 }
@@ -420,6 +419,15 @@ iframe {
   pointer-events: none;
 }
 
+@media screen and (max-width: 500px) {
+  .table-row-imp h3,
+  .fuel-val,
+  .fuel-inp,
+  .table-row h3 {
+    font-size: 20px;
+  }
+}
+
 @media screen and (max-width: 968px) {
   .row {
     flex-wrap: wrap;
@@ -433,10 +441,6 @@ iframe {
     position: relative;
     height: auto;
     min-height: 100% !important;
-  }
-
-  .footer a {
-    font-size: 14px;
   }
 }
 
