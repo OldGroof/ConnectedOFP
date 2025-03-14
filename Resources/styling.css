@@ -214,7 +214,7 @@ h3 {
 }
 
 .fuel-bar {
-  height: calc(100vh - 185px);
+  height: calc(100svh - 185px);
   margin: 15px 20px;
   padding: 10px;
   background-color: rgb(255, 255, 255);
