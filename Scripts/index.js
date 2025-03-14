@@ -611,12 +611,27 @@ function GetLiveData() {
     if (liveData == null || isEmpty(liveData))
         liveData = {};
 
+    const inpActFuel = document.getElementById('inpActFuel');
+    inpActFuel.disabled = false;
+    inpActFuel.value = "";
+    const inpOutTime = document.getElementById('inpOut');
+    inpOutTime.disabled = false;
+    inpOutTime.value = "";
+    const inpOffTime = document.getElementById('inpOff');
+    inpOffTime.disabled = false;
+    inpOffTime.value = "";
+    const inpOnTime = document.getElementById('inpOn');
+    inpOnTime.disabled = false;
+    inpOnTime.value = "";
+    const inpInTime = document.getElementById('inpIn');
+    inpInTime.disabled = false;
+    inpInTime.value = "";
     if (flightData == null || fuelData == null) {
-        document.getElementById('inpActFuel').disabled = true;
-        document.getElementById('inpOut').disabled = true;
-        document.getElementById('inpOff').disabled = true;
-        document.getElementById('inpOn').disabled = true;
-        document.getElementById('inpIn').disabled = true;
+        inpActFuel.disabled = true;
+        inpOutTime.disabled = true;
+        inpOffTime.disabled = true;
+        inpOnTime.disabled = true;
+        inpInTime.disabled = true;
         return;
     }
 
@@ -636,31 +651,29 @@ function GetLiveData() {
     if (liveData.in_time == null)
         liveData.in_time = "";
 
-    let inp = document.getElementById('inpActFuel');
-    inp.placeholder = fuelData.final_ramp.toString();
+    inpActFuel.placeholder = fuelData.final_ramp.toString();
     if (liveData.dep_fuel != "")
-        inp.value = liveData.dep_fuel.toString();
-    inp.addEventListener('focusout', function (event) {
+        inpActFuel.value = liveData.dep_fuel.toString();
+    inpActFuel.addEventListener('focusout', function (event) {
         liveData.dep_fuel = this.value;
         UpdateNavLog();
     });
-    inp.addEventListener('keydown', function (event) {
+    inpActFuel.addEventListener('keydown', function (event) {
         if (event.key === 'Enter')
             this.blur();
     });
 
-    inp = document.getElementById('inpOut');
     if (liveData.out_time != "")
-        inp.value = liveData.out_time.toString();
-    inp.addEventListener('focusout', function (event) {
+        inpOutTime.value = liveData.out_time.toString();
+    inpOutTime.addEventListener('focusout', function (event) {
         liveData.out_time = this.value;
         UpdateNavLog();
     });
-    inp.addEventListener('keydown', function (event) {
+    inpOutTime.addEventListener('keydown', function (event) {
         if (event.key === 'Enter')
             this.blur();
     });
-    inp.oninput = function () {
+    inpOutTime.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
         if (this.value.length >= 2) {
             let hours = parseInt(this.value.slice(0, 2), 10);
@@ -671,18 +684,17 @@ function GetLiveData() {
         }
     };
 
-    inp = document.getElementById('inpOff');
     if (liveData.off_time != "")
-        inp.value = liveData.off_time.toString();
-    inp.addEventListener('focusout', function (event) {
+        inpOffTime.value = liveData.off_time.toString();
+    inpOffTime.addEventListener('focusout', function (event) {
         liveData.off_time = this.value;
         UpdateNavLog();
     });
-    inp.addEventListener('keydown', function (event) {
+    inpOffTime.addEventListener('keydown', function (event) {
         if (event.key === 'Enter')
             this.blur();
     });
-    inp.oninput = function () {
+    inpOffTime.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
         if (this.value.length >= 2) {
             let hours = parseInt(this.value.slice(0, 2), 10);
@@ -693,20 +705,19 @@ function GetLiveData() {
         }
     };
 
-    inp = document.getElementById('inpOn');
     if (liveData.on_time != "")
-        inp.value = liveData.on_time.toString();
-    inp.addEventListener('focusout', function (event) {
+        inpOnTime.value = liveData.on_time.toString();
+    inpOnTime.addEventListener('focusout', function (event) {
         liveData.on_time = this.value;
         let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
         UpdateLegTime(last_leg, this.value);
         UpdateNavLog();
     });
-    inp.addEventListener('keydown', function (event) {
+    inpOnTime.addEventListener('keydown', function (event) {
         if (event.key === 'Enter')
             this.blur();
     });
-    inp.oninput = function () {
+    inpOnTime.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
         if (this.value.length >= 2) {
             let hours = parseInt(this.value.slice(0, 2), 10);
@@ -717,18 +728,17 @@ function GetLiveData() {
         }
     };
 
-    inp = document.getElementById('inpIn');
     if (liveData.in_time != "")
-        inp.value = liveData.in_time.toString();
-    inp.addEventListener('focusout', function (event) {
+        inpInTime.value = liveData.in_time.toString();
+    inpInTime.addEventListener('focusout', function (event) {
         liveData.in_time = this.value;
         UpdateNavLog();
     });
-    inp.addEventListener('keydown', function (event) {
+    inpInTime.addEventListener('keydown', function (event) {
         if (event.key === 'Enter')
             this.blur();
     });
-    inp.oninput = function () {
+    inpInTime.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
         if (this.value.length >= 2) {
             let hours = parseInt(this.value.slice(0, 2), 10);
