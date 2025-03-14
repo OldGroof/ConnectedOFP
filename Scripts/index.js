@@ -279,20 +279,19 @@ function GetFuelPlan() {
     document.getElementById('txtFnlBlkFuel').innerHTML = fuelData.final_ramp + units;
 
     if (fuelData.tank != null && fuelData.tank != "0")
-        document.getElementById('inpTankFuel').value = fuelData.tank;
+        inpTankFuel.value = fuelData.tank;
 
-    const select = document.getElementById('inpAltns');
-    while (select.firstChild)
-        select.removeChild(select.firstChild);
+    while (inpAltns.firstChild)
+        inpAltns.removeChild(inpAltns.firstChild);
 
-    select.addEventListener("change", UpdateFuelPlan);
+    inpAltns.addEventListener("change", UpdateFuelPlan);
     if (flightData.alternate.length == null) {
         let obj = flightData.alternate;
 
         var opt = document.createElement('option');
         opt.value = 0;
         opt.innerHTML = obj.icao_code;
-        select.appendChild(opt);
+        inpAltns.appendChild(opt);
     } else {
         for (let i = 0; i < flightData.alternate.length; i++) {
             let obj = flightData.alternate[i];
@@ -300,16 +299,15 @@ function GetFuelPlan() {
             var opt = document.createElement('option');
             opt.value = i;
             opt.innerHTML = obj.icao_code;
-            select.appendChild(opt);
+            inpAltns.appendChild(opt);
             if (flightData.select_alternate == i)
-                select.value = i;
+                inpAltns.value = i;
         }
     }
-    if (select.options.length == 0)
-        select.disabled = true;
+    if (inpAltns.options.length == 0)
+        inpAltns.disabled = true;
 
-    let inp = document.getElementById("inpTankFuel");
-    inp.addEventListener("keyup", UpdateFuelPlan);
+    inpTankFuel.addEventListener("keyup", UpdateFuelPlan);
 
     const discList = document.getElementById('disc_list');
     while (discList.firstChild)
