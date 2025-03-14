@@ -60,7 +60,7 @@ function GoOFP() {
 
 
     document.getElementById('divOFP').style = "display: block;";
-    GetPDF();
+    // GetPDF();
 }
 
 function GoPlnFuel() {
@@ -71,7 +71,7 @@ function GoPlnFuel() {
 
 
     document.getElementById('divPlnFuel').style = "display: block;";
-    GetFuelPlan();
+    // GetFuelPlan();
 }
 
 function GoActFuel() {
@@ -82,7 +82,7 @@ function GoActFuel() {
 
 
     document.getElementById('divActFuel').style = "display: block;";
-    GetLiveData();
+    // GetLiveData();
 }
 
 function GoNavLog() {
@@ -93,6 +93,42 @@ function GoNavLog() {
 
 
     document.getElementById('divNavLog').style = "display: block;";
+    // GetNavLog();
+}
+
+function LoadPage() {
+    let id_cookie = getCookie("simbrief_id");
+    if (id_cookie != "")
+        smbrfID = id_cookie;
+    else smbrfID = "";
+
+    if (smbrfID == "") {
+        console.error("There is no Simbrief ID.");
+        return;
+    }
+    document.getElementById("inpID").value = smbrfID;
+
+    flightData = JSON.parse(localStorage.getItem('flight_data'));
+    fuelData = JSON.parse(localStorage.getItem('fuel_data'));
+    liveData = JSON.parse(localStorage.getItem('live_data'));
+
+    if (flightData == null || isEmpty(flightData))
+        return;
+
+    let date = FormatDate(flightData.api_params.date);
+    let fltID = "Flight - ";
+    if (!isEmpty(flightData.general.icao_airline))
+        fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+    else
+        fltID = "Flight - " + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+
+    fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
+    console.log(fltID);
+    document.getElementById("txtFltID").innerHTML = fltID;
+
+    GetPDF();
+    GetFuelPlan();
+    GetLiveData();
     GetNavLog();
 }
 
@@ -104,7 +140,7 @@ function SetSimbriefID(id) {
         RefreshOFP();
     } else {
         smbrfID = "";
-        ResetData();
+        ResetLocalData();
     }
 }
 
@@ -144,7 +180,7 @@ function GetSimbriefOFP() {
 function RefreshOFP() {
     if (smbrfID == "") {
         console.error("There is no Simbrief ID.");
-        ResetData();
+        ResetLocalData();
         return;
     }
     FetchSimbriefAPI();
@@ -220,9 +256,18 @@ function ResetData() {
     document.cookie = "simbrief_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
+
 function GetFlightDataLocal() {
     flightData = JSON.parse(localStorage.getItem('flight_data'));
     sessionStorage.setItem('flight_data', JSON.stringify(flightData));
+
+    GetPDF();
+
+    // get fuel plan
+
+    // get actual fuel
+
+    // get navlog
 }
 
 function GetPDF() {
