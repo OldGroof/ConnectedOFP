@@ -587,11 +587,8 @@ function GetLiveData() {
         UpdateNavLog();
     });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.dep_fuel = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
 
     inp = document.getElementById('inpOut');
@@ -602,11 +599,8 @@ function GetLiveData() {
         UpdateNavLog();
     });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.out_time = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -627,11 +621,8 @@ function GetLiveData() {
         UpdateNavLog();
     });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.off_time = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -649,18 +640,13 @@ function GetLiveData() {
         inp.value = liveData.on_time.toString();
     inp.addEventListener('focusout', function (event) {
         liveData.on_time = this.value;
+        let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
+        UpdateLegTime(last_leg, this.value);
         UpdateNavLog();
     });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.on_time = this.value;
-
-            let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
-            UpdateLegTime(last_leg, Number(this.value));
-
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -681,11 +667,8 @@ function GetLiveData() {
         UpdateNavLog();
     });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.in_time = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -894,25 +877,14 @@ function AddLegRow(std, leg) {
     newDiv.appendChild(newBox);
 
     newInp.addEventListener('focusout', function (event) {
-        UpdateLegTime(leg, Number(this.value));
+        UpdateLegTime(leg, this.value);
         UpdateInputLabel(this, leg.diff_time);
-
-        const nextInput = document.getElementById('inpFuel' + leg.ident + eto);
-        if (nextInput && this.value != "")
-            nextInput.focus();
     });
     newInp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            UpdateLegTime(leg, Number(this.value));
-            UpdateInputLabel(this, leg.diff_time);
-            this.blur();
-
             const nextInput = document.getElementById('inpFuel' + leg.ident + eto);
             if (nextInput && this.value != "")
                 nextInput.focus();
-        } else if (event.key === 'Escape') {
-            if (leg.ato != null)
-                this.value = leg.ato.toString();
             this.blur();
         }
     });
@@ -945,15 +917,8 @@ function AddLegRow(std, leg) {
         UpdateInputLabel(this, leg.diff_fuel);
     });
     newInp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            UpdateLegFuel(leg, Number(this.value));
-            UpdateInputLabel(this, leg.diff_fuel);
+        if (event.key === 'Enter')
             this.blur();
-        } else if (event.key === 'Escape') {
-            if (leg.afob != null)
-                this.value = leg.afob.toString();
-            this.blur();
-        }
     });
 
     if (leg.diff_fuel != null)
@@ -991,7 +956,7 @@ function AddLegRow(std, leg) {
 
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 function UpdateLegTime(leg, time) {
-    if (time == "" || time == 0) {
+    if (time == "") {
         delete leg.ato;
         delete leg.diff_time;
     } else {
