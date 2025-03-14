@@ -69,6 +69,10 @@
   background: rgb(240, 247, 251);
 }
 
+.footer p {
+  white-space: nowrap;
+}
+
 .table-row {
   width: 100%;
   display: flex;
