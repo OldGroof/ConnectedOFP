@@ -853,7 +853,7 @@ function AddLegRow(std, leg) {
     let newInp = document.createElement('input');
     newInp.id = 'inpTime' + leg.ident + eto;
     newInp.type = 'text';
-    newInp.inputMode = 'numeric';
+    newInp.inputMode = 'text';
     newInp.placeholder = '-';
     newInp.maxLength = '4';
     newInp.oninput = function () {
@@ -898,7 +898,7 @@ function AddLegRow(std, leg) {
     newInp = document.createElement('input');
     newInp.id = 'inpFuel' + leg.ident + eto;
     newInp.type = 'text';
-    newInp.inputMode = 'numeric';
+    newInp.inputMode = 'text';
     newInp.placeholder = '-';
     newInp.maxLength = '6';
     newInp.oninput = function () {
