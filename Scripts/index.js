@@ -758,14 +758,20 @@ function AddLegRow(std, leg) {
     newDiv.style = 'width: 100%; display: flex;';
 
     var newName = document.createElement('div');
-    newName.className = 'leg-name'
-    newName.innerHTML = leg.name;
+    newName.className = 'leg-ident'
+    newName.innerHTML = leg.ident;
     newDiv.appendChild(newName);
 
+    if (leg.ident != leg.name) {
+        newName = document.createElement('div');
+        newName.className = 'leg-name'
+        newName.innerHTML = leg.name;
+        newDiv.appendChild(newName);
+    }
+
     newName = document.createElement('div');
-    newName.className = 'leg-name'
-    newName.innerHTML = leg.ident;
-    newName.style = 'border-right: none;';
+    newName.className = 'leg-airway'
+    newName.innerHTML = leg.via_airway;
     newDiv.appendChild(newName);
 
     newRow.appendChild(newDiv);
@@ -944,7 +950,7 @@ function AddLegRow(std, leg) {
                 behavior: "instant",
                 block: "start",
             });
-       }, 1);
+        }, 1);
 }
 
 const zeroPad = (num, places) => String(num).padStart(places, '0');
