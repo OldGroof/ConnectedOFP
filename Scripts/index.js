@@ -374,7 +374,7 @@ function AddDiscRow(idx) {
     var optDis = document.createElement('option');
     optDis.disabled = true;
     optDis.value = "";
-    optDis.innerHTML = "None";
+    optDis.innerHTML = "Reason";
     optDis.selected = true;
     optDis.hidden = true;
     newSel.appendChild(optDis);
