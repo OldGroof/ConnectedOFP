@@ -785,6 +785,10 @@ function GetNavLog() {
         fuelData = JSON.parse(localStorage.getItem('fuel_data'));
     liveData = JSON.parse(localStorage.getItem('live_data'));
 
+    const legList = document.getElementById('legList');
+    while (legList.firstChild)
+        legList.removeChild(legList.firstChild);
+
     if (flightData == null || fuelData == null) return;
 
     if (fuelData.tank == null)
@@ -795,10 +799,6 @@ function GetNavLog() {
     UpdateNavLog();
 
     let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
-
-    const legList = document.getElementById('legList');
-    while (legList.firstChild)
-        legList.removeChild(legList.firstChild);
 
     for (let i = 0; i < flightData.navlog.fix.length; i++) {
         let leg = flightData.navlog.fix[i];
