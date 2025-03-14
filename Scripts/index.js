@@ -401,7 +401,6 @@ function AddDiscRow(idx) {
     newInp.id = "inpDiscFuel" + idx.toString();
     newInp.className = "fuel-inp";
     newInp.type = "number";
-    newInp.inputMode = "text";
     newInp.placeholder = "-"
     newInp.maxLength = "6";
     newInp.oninput = function () { this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); };
@@ -853,7 +852,6 @@ function AddLegRow(std, leg) {
     let newInp = document.createElement('input');
     newInp.id = 'inpTime' + leg.ident + eto;
     newInp.type = 'number';
-    newInp.inputMode = 'text';
     newInp.placeholder = '-';
     newInp.maxLength = '4';
     newInp.oninput = function () {
@@ -898,7 +896,6 @@ function AddLegRow(std, leg) {
     newInp = document.createElement('input');
     newInp.id = 'inpFuel' + leg.ident + eto;
     newInp.type = 'number';
-    newInp.inputMode = 'text';
     newInp.placeholder = '-';
     newInp.maxLength = '6';
     newInp.oninput = function () {
