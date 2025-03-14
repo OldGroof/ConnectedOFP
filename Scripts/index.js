@@ -42,6 +42,60 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
+function GoHome() {
+    document.getElementById('divOFP').style = "display: none;";
+    document.getElementById('divPlnFuel').style = "display: none;";
+    document.getElementById('divActFuel').style = "display: none;";
+    document.getElementById('divNavLog').style = "display: none;";
+
+
+    document.getElementById('divHome').style = "display: block;";
+}
+
+function GoOFP() {
+    document.getElementById('divHome').style = "display: none;";
+    document.getElementById('divActFuel').style = "display: none;";
+    document.getElementById('divPlnFuel').style = "display: none;";
+    document.getElementById('divNavLog').style = "display: none;";
+
+
+    document.getElementById('divOFP').style = "display: block;";
+    GetPDF();
+}
+
+function GoPlnFuel() {
+    document.getElementById('divHome').style = "display: none;";
+    document.getElementById('divOFP').style = "display: none;";
+    document.getElementById('divActFuel').style = "display: none;";
+    document.getElementById('divNavLog').style = "display: none;";
+
+
+    document.getElementById('divPlnFuel').style = "display: block;";
+    GetFuelPlan();
+}
+
+function GoActFuel() {
+    document.getElementById('divHome').style = "display: none;";
+    document.getElementById('divOFP').style = "display: none;";
+    document.getElementById('divPlnFuel').style = "display: none;";
+    document.getElementById('divNavLog').style = "display: none;";
+
+
+    document.getElementById('divActFuel').style = "display: block;";
+    GetLiveData();
+}
+
+function GoNavLog() {
+    document.getElementById('divHome').style = "display: none;";
+    document.getElementById('divOFP').style = "display: none;";
+    document.getElementById('divPlnFuel').style = "display: none;";
+    document.getElementById('divActFuel').style = "display: none;";
+
+
+    document.getElementById('divNavLog').style = "display: block;";
+    GetNavLog();
+}
+
 function SetSimbriefID(id) {
     if (id != null && id != 0) {
         smbrfID = id;
@@ -180,14 +234,6 @@ function GetPDF() {
     pfdEmbed.src = dir;
 }
 
-var select = document.getElementById("inpAltns")
-if (select != null)
-    select.addEventListener("change", UpdateFuelPlan);
-var inp = document.getElementById("inpTankFuel")
-if (inp != null) {
-    inp.addEventListener("keyup", UpdateFuelPlan);
-}
-
 function GetFuelPlan() {
     if (flightData == null || isEmpty(flightData))
         GetFlightDataLocal();
@@ -226,7 +272,11 @@ function GetFuelPlan() {
     if (fuelData.tank != null && fuelData.tank != "0")
         document.getElementById('inpTankFuel').value = fuelData.tank;
 
-    select = document.getElementById('inpAltns');
+    const select = document.getElementById('inpAltns');
+    while (select.firstChild)
+        select.removeChild(select.firstChild);
+
+    select.addEventListener("change", UpdateFuelPlan);
     if (flightData.alternate.length == null) {
         let obj = flightData.alternate;
 
@@ -249,13 +299,20 @@ function GetFuelPlan() {
     if (select.options.length == 0)
         select.disabled = true;
 
+    let inp = document.getElementById("inpTankFuel");
+    inp.addEventListener("keyup", UpdateFuelPlan);
+
+    const discList = document.getElementById('disc_list');
+    while (discList.firstChild)
+        discList.removeChild(discList.firstChild);
+
     if (fuelData.discretionary != null) {
         for (var i = 0; i < fuelData.discretionary.length; i++) {
             let disc = fuelData.discretionary[i];
 
             AddDiscRow(i);
             document.getElementById('inpDiscRes' + i.toString()).value = disc.reason;
-            let inp = document.getElementById('inpDiscFuel' + i.toString());
+            inp = document.getElementById('inpDiscFuel' + i.toString());
             if (disc.amount != "0")
                 inp.value = disc.amount;
         }
@@ -278,6 +335,7 @@ function UpdateFuelPlan() {
     if (flightData.alternate.length == null) {
         fuelData.alternate_burn = flightData.alternate.burn;
     } else {
+        const select = document.getElementById('inpAltns');
         fuelData.alternate_burn = flightData.alternate[select.value].burn;
         flightData.select_alternate = select.value.toString();
 
@@ -302,7 +360,7 @@ function UpdateFuelPlan() {
     document.getElementById('txtPlnBlkFuel').innerHTML = fuelData.plan_ramp + units;
 
     // update tankering value
-    inp = document.getElementById('inpTankFuel');
+    const inp = document.getElementById("inpTankFuel");
     if (inp.value != "") {
         fuelData.tank = inp.value.toString();
     } else {
@@ -727,6 +785,10 @@ function GetNavLog() {
     UpdateNavLog();
 
     let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
+
+    const legList = document.getElementById('legList');
+    while (legList.firstChild)
+        legList.removeChild(legList.firstChild);
 
     for (let i = 0; i < flightData.navlog.fix.length; i++) {
         let leg = flightData.navlog.fix[i];

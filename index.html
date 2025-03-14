@@ -37,39 +37,270 @@
 </head>
 
 <body onload="GetSimbriefOFP()">
-
-    <div class="header">
-        <h1>ConnectedOFP</h1>
-        <input type="text" id="inpID" class="input" value="" placeholder="ID/Username" />
-    </div>
-
-    <div class="bar" style="margin-top: 84px;">
-        <h2 id="txtFltID" style="border-bottom: 1px solid #bebebe; padding-bottom: 3px;">Flight</h2>
-        <div style="display: flex; height: 45%;">
-            <a class="index-button" href="ofp/" disabled>
-                <span class="material-icons" style="font-size: 48px;">receipt_long</span>
-                <p>OFP</p>
-            </a>
-            <a class="index-button" href="navlog/">
-                <span class="material-icons" style="font-size: 48px;">list</span>
-                <p>Navlog</p>
-            </a>
+    <div id="divHome">
+        <div class="header">
+            <h1>ConnectedOFP</h1>
+            <input type="text" id="inpID" class="input" value="" placeholder="ID/Username" />
         </div>
-        <div style="display: flex; height: 45%;">
-            <a class="index-button" href="plnfuel/">
-                <span class="material-icons" style="font-size: 48px;">view_in_ar</span>
-                <p>Fuel Planning</p>
-            </a>
-            <a class="index-button" href="actfuel/">
-                <span class="material-icons" style="font-size: 48px;">speed</span>
-                <p>Actual Fuel</p>
-            </a>
+    
+        <div class="bar" style="margin-top: 84px;">
+            <h2 id="txtFltID" style="border-bottom: 1px solid #bebebe; padding-bottom: 3px;">Flight</h2>
+            <div style="display: flex; height: 45%;">
+                <a class="index-button" onclick="GoOFP()">
+                    <span class="material-icons" style="font-size: 48px;">receipt_long</span>
+                    <p>OFP</p>
+                </a>
+                <a class="index-button" onclick="GoNavLog()">
+                    <span class="material-icons" style="font-size: 48px;">list</span>
+                    <p>Navlog</p>
+                </a>
+            </div>
+            <div style="display: flex; height: 45%;">
+                <a class="index-button" onclick="GoPlnFuel()">
+                    <span class="material-icons" style="font-size: 48px;">view_in_ar</span>
+                    <p>Fuel Planning</p>
+                </a>
+                <a class="index-button" onclick="GoActFuel()">
+                    <span class="material-icons" style="font-size: 48px;">speed</span>
+                    <p>Actual Fuel</p>
+                </a>
+            </div>
+        </div>
+    
+        <div style="display: flex; justify-content: center;">
+            <a class="problem" href="https://github.com/OldGroof/ConnectedOFP/issues" target="_blank">Report a problem</a>
         </div>
     </div>
 
-    <div style="display: flex; justify-content: center;">
-        <a class="problem" href="https://github.com/OldGroof/ConnectedOFP/issues" target="_blank">Report a problem</a>
+    <div id="divOFP" style="display: none;">
+        <div class="header" style="z-index: 5">
+            <h1>OFP Viewer</h1>
+            <a id="home" style="float: right; margin-left: auto;" onclick="GoHome()"><span
+                    class="material-icons">home</span></a>
+        </div>
+    
+        <div class="bar" style="margin-top: 84px; display: flex; justify-content: center; height: calc(100dvh - 185px);">
+            <iframe title="OFPViewer" id="outPDF" src=""></iframe>
+        </div>
+    
+        <div class="footer" style="z-index: 5">
+            <div style="display: flex; justify-content: center;">
+                <a id="ofp">
+                    <span class="material-icons">receipt_long</span>
+                    <p>OFP</p>
+                </a>
+                <a id="pln" onclick="GoPlnFuel()" style="cursor: pointer;">
+                    <span class="material-icons">view_in_ar</span>
+                    <p>Fuel Plan</p>
+                </a>
+                <a id="act" onclick="GoActFuel()" style="cursor: pointer;">
+                    <span class="material-icons">speed</span>
+                    <p>Actual Fuel</p>
+                </a>
+                <a id="nav" onclick="GoNavLog()" style="cursor: pointer;">
+                    <span class="material-icons">list</span>
+                    <p>Navlog</p>
+                </a>
+            </div>
+        </div>
+        <div style="height: 65px;"></div>
     </div>
+
+    <div id="divPlnFuel" style="display: none;">
+        <div class="header" style="z-index: 5">
+            <h1 id="txtPageTitle">Fuel Planning</h1>
+            <a id="home" style="float: right; margin-left: auto;" onclick="GoHome()"><span
+                    class="material-icons">home</span></a>
+        </div>
+    
+        <div class="fuel-bar" style="margin-top: 84px; display: flex; justify-content: center;">
+            <div class="row">
+                <div class="column">
+                    <div id="divFuel" style="overflow-y: scroll; height: calc(100% - 53px);">
+                        <div class="table-row">
+                            <h3>Taxi</h3>
+                            <p class="fuel-val" id="txtTaxiFuel">- kg</p>
+                        </div>
+                        <div class="table-row">
+                            <h3>Trip</h3>
+                            <p class="fuel-val" id="txtTripFuel">- kg</p>
+                        </div>
+                        <div class="table-row">
+                            <h3 id="lblCont">Contingency: </h3>
+                            <p class="fuel-val" id="txtContFuel">- kg</p>
+                        </div>
+                        <div class="table-row">
+                            <h3>Alternate:</h3>
+                            <select id="inpAltns" style="margin-top: auto; margin-bottom: auto;"></select>
+                            <p class="fuel-val" id="txtAltnFuel">- kg</p>
+                        </div>
+                        <div class="table-row">
+                            <h3>Reserve</h3>
+                            <p class="fuel-val" id="txtFinResFuel">- kg</p>
+                        </div>
+                        <div class="table-row-imp">
+                            <h3 style="font-weight: 500;">PLN BLK</h3>
+                            <p class="fuel-val" id="txtPlnBlkFuel">- kg</p>
+                        </div>
+                        <div class="table-row">
+                            <h3>Tankering</h3>
+                            <div class="fuel-inp-div">
+                                <input id="inpTankFuel" class="fuel-inp" type="text" placeholder="-"
+                                    maxlength="6" inputmode="numeric"
+                                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                </input>
+                                <span id="spnTankFuel" class
+                                    style="font-size: 20px; font-weight: 350; margin-left:-24px;">kg</span>
+                            </div>
+                        </div>
+                        <div id="disc_list"></div>
+                        <button id="butDiscAdd" class="disc-button" onclick="AddDiscFuel()">DISC +</button>
+                    </div>
+                    <div class="table-row-imp" style="position: relative; bottom: 0; width: 100%;">
+                        <h3 style="font-weight: 500;">FINAL BLK</h3>
+                        <p class="fuel-val" id="txtFnlBlkFuel">- kg</p>
+                    </div>
+                </div>
+                <div class="column" style="min-height: 340px; padding: 15px;">
+                    <div class="row" style="height: 170px;">
+                        <div class="gauge" style="margin-inline: auto;">
+                            <div id="arcTOW" class="arc"></div>
+                            <div class="label">TOW</div>
+                            <div id="txtTOW" class="val">0%</div>
+                        </div>
+                        <div class="gauge" style="margin-inline: auto;">
+                            <div id="arcLW" class="arc"></div>
+                            <div class="label">LW</div>
+                            <div id="txtLW" class="val">0%</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="gauge">
+                            <div id="arcZFW" class="arc"></div>
+                            <div class="label">ZFW</div>
+                            <div id="txtZFW" class="val">0%</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    
+        <div class="footer" style="z-index: 5">
+            <div style="display: flex; justify-content: center;">
+                <a id="ofp" onclick="GoOFP()" style="cursor: pointer;">
+                    <span class="material-icons">receipt_long</span>
+                    <p>OFP</p>
+                </a>
+                <a id="pln">
+                    <span class="material-icons">view_in_ar</span>
+                    <p>Fuel Plan</p>
+                </a>
+                <a id="act" onclick="GoActFuel()" style="cursor: pointer;">
+                    <span class="material-icons">speed</span>
+                    <p>Actual Fuel</p>
+                </a>
+                <a id="nav" onclick="GoNavLog()" style="cursor: pointer;">
+                    <span class="material-icons">list</span>
+                    <p>Navlog</p>
+                </a>
+            </div>
+        </div>
+        <div style="height: 65px;"></div>
+    </div>
+
+    <div id="divActFuel" style="display: none;">
+        <div class="header" style="z-index: 5">
+            <h1>Actual Fuel</h1>
+            <a id="home" style="float: right; margin-left: auto;" onclick="GoHome()"><span
+                    class="material-icons">home</span></a>
+        </div>
+    
+        <div class="bar" style="margin-top: 84px; ">
+            <div style="display: flex; width: 100%;">
+                <h3 style="float: left;">Actual Fuel</h3>
+                <input id="inpActFuel" class="act-inp" type="text" inputmode="numeric" placeholder="Actual Fuel" maxlength="6"
+                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                </input>
+            </div>
+            <div style="display: flex; width: 100%;">
+                <h3 style="float: left;">Out</h3>
+                <input id="inpOut" class="act-inp" type="text" inputmode="numeric" placeholder="Out Time" maxlength="4">
+                </input>
+            </div>
+            <div style="display: flex; width: 100%;">
+                <h3 style="float: left;">Off</h3>
+                <input id="inpOff" class="act-inp" type="text" inputmode="numeric" placeholder="Off Time" maxlength="4">
+                </input>
+            </div>
+            <div style="display: flex; width: 100%;">
+                <h3 style="float: left;">On</h3>
+                <input id="inpOn" class="act-inp" type="text" inputmode="numeric" placeholder="On Time" maxlength="4">
+                </input>
+            </div>
+            <div style="display: flex; width: 100%;">
+                <h3 style="float: left;">In</h3>
+                <input id="inpIn" class="act-inp" type="text" inputmode="numeric" placeholder="In Time" maxlength="4">
+                </input>
+            </div>
+        </div>
+    
+        <div class="footer" style="z-index: 5">
+            <div style="display: flex; justify-content: center;">
+                <a id="ofp" onclick="GoOFP()" style="cursor: pointer;">
+                    <span class="material-icons">receipt_long</span>
+                    <p>OFP</p>
+                </a>
+                <a id="pln" onclick="GoPlnFuel()" style="cursor: pointer;">
+                    <span class="material-icons">view_in_ar</span>
+                    <p>Fuel Plan</p>
+                </a>
+                <a id="act">
+                    <span class="material-icons">speed</span>
+                    <p>Actual Fuel</p>
+                </a>
+                <a id="nav" onclick="GoNavLog()" style="cursor: pointer;">
+                    <span class="material-icons">list</span>
+                    <p>Navlog</p>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div id="divNavLog" style="display: none;">
+        <div class="header" style="z-index: 5">
+            <h1>Navlog</h1>
+            <a id="home" style="float: right; margin-left: auto;" onclick="GoHome()"><span
+                    class="material-icons">home</span></a>
+        </div>
+    
+        <div class="bar" style="margin-top: 84px; height: calc(100dvh - 185px);">
+            <div id="legList" class="leg-list"></div>
+        </div>
+    
+        <div class="footer" style="z-index: 5">
+            <div style="display: flex; justify-content: center;">
+                <a id="ofp" onclick="GoOFP()" style="cursor: pointer;">
+                    <span class="material-icons" >receipt_long</span>
+                    <p>OFP</p>
+                </a>
+                <a id="pln" onclick="GoPlnFuel()" style="cursor: pointer;">
+                    <span class="material-icons" >view_in_ar</span>
+                    <p>Fuel Plan</p>
+                </a>
+                <a id="act" onclick="GoActFuel()" style="cursor: pointer;">
+                    <span class="material-icons" >speed</span>
+                    <p>Actual Fuel</p>
+                </a>
+                <a id="nav">
+                    <span class="material-icons" >list</span>
+                    <p>Navlog</p>
+                </a>
+            </div>
+        </div>
+    
+        <div style="height: 65px;"></div>
+    </div>
+    
     <script src="Scripts/index.js"></script>
 </body>
 
