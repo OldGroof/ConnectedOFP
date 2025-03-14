@@ -240,7 +240,6 @@ function GetFuelPlan() {
     if (fuelData == null || isEmpty(fuelData))
         fuelData = JSON.parse(localStorage.getItem('fuel_data'));
 
-
     const lblCont = document.getElementById('lblCont');
     lblCont.innerHTML = "Contingency:";
 
