@@ -229,8 +229,13 @@ function GetPDF() {
     if (flightData == null || isEmpty(flightData))
         GetFlightDataLocal();
 
-    const dir = "https://docs.google.com/gview?url=" + flightData.files.directory + flightData.files.pdf.link + "&embedded=true";
     const pfdEmbed = document.getElementById('outPDF');
+    if (flightData == null) {
+        pfdEmbed.src = "";
+        return;
+    }
+
+    const dir = "https://docs.google.com/gview?url=" + flightData.files.directory + flightData.files.pdf.link + "&embedded=true";
     pfdEmbed.src = dir;
 }
 
