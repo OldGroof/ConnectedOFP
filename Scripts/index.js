@@ -401,7 +401,7 @@ function AddDiscRow(idx) {
     newInp.id = "inpDiscFuel" + idx.toString();
     newInp.className = "fuel-inp";
     newInp.type = "number";
-    newInp.inputMode = "numeric";
+    newInp.inputMode = "text";
     newInp.placeholder = "-"
     newInp.maxLength = "6";
     newInp.oninput = function () { this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); };
