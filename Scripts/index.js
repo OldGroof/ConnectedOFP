@@ -240,10 +240,19 @@ function GetFuelPlan() {
     if (fuelData == null || isEmpty(fuelData))
         fuelData = JSON.parse(localStorage.getItem('fuel_data'));
 
+    const inpAltns = document.getElementById('inpAltns');
+    inpAltns.disabled = false;
+    inpAltns.value = "";
+    const inpTankFuel = document.getElementById('inpTankFuel');
+    inpTankFuel.disabled = false;
+    inpTankFuel.value = "";
+    const butDiscAdd = document.getElementById('butDiscAdd');
+    butDiscAdd.disabled = false;
+
     if (fuelData == null && flightData == null) {
-        document.getElementById('inpAltns').disabled = true;
-        document.getElementById('inpTankFuel').disabled = true;
-        document.getElementById('butDiscAdd').disabled = true;
+        inpAltns.disabled = true;
+        inpTankFuel.disabled = true;
+        butDiscAdd.disabled = true;
         return;
     }
 
