@@ -991,7 +991,7 @@ function AddLegRow(std, leg) {
 
 const zeroPad = (num, places) => String(num).padStart(places, '0');
 function UpdateLegTime(leg, time) {
-    if (time == "") {
+    if (time == "" || time == 0) {
         delete leg.ato;
         delete leg.diff_time;
     } else {
