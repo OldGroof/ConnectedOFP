@@ -873,6 +873,15 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newInp);
     newDiv.appendChild(newBox);
 
+    newInp.addEventListener('focusout', function (event) {
+        UpdateLegTime(leg, Number(this.value));
+        UpdateInputLabel(this, leg.diff_time);
+        this.blur();
+
+        const nextInput = document.getElementById('inpFuel' + leg.ident + eto);
+        if (nextInput && this.value != "")
+            nextInput.focus();
+    });
     newInp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             UpdateLegTime(leg, Number(this.value));
@@ -888,6 +897,7 @@ function AddLegRow(std, leg) {
             this.blur();
         }
     });
+
     if (leg.diff_time != null)
         UpdateInputLabel(newInp, leg.diff_time);
 
@@ -911,6 +921,11 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newInp);
     newDiv.appendChild(newBox);
 
+    newInp.addEventListener('focusout', function (even) {
+        UpdateLegFuel(leg, Number(this.value));
+        UpdateInputLabel(this, leg.diff_fuel);
+        this.blur();
+    });
     newInp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             UpdateLegFuel(leg, Number(this.value));
@@ -922,6 +937,7 @@ function AddLegRow(std, leg) {
             this.blur();
         }
     });
+
     if (leg.diff_fuel != null)
         UpdateInputLabel(newInp, leg.diff_fuel);
 
