@@ -43,6 +43,19 @@
   outline: none;
 }
 
+.problem {
+  position: fixed;
+  bottom: 20px;
+  color: rgb(78, 78, 78);
+  text-decoration: none;
+  font-size: 20px;
+  text-align: center;
+}
+.problem :visited {
+  color: rgb(78, 78, 78);
+  text-decoration: none;
+}
+
 .footer {
   position: fixed;
   background-color: rgb(255, 255, 255);
