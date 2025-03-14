@@ -985,7 +985,7 @@ function UpdateLegTime(leg, time) {
 }
 
 function UpdateLegFuel(leg, fuel) {
-    if (fuel == "") {
+    if (fuel == "" || fuel == 0) {
         delete leg.afob;
         delete leg.diff_fuel;
     } else {
