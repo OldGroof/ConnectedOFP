@@ -240,6 +240,25 @@ function GetFuelPlan() {
     if (fuelData == null || isEmpty(fuelData))
         fuelData = JSON.parse(localStorage.getItem('fuel_data'));
 
+
+    const lblCont = document.getElementById('lblCont');
+    lblCont.innerHTML = "Contingency:";
+
+    const txtTaxiFuel = document.getElementById('txtTaxiFuel');
+    txtTaxiFuel.innerHTML = "- kg";
+    const txtTripFuel = document.getElementById('txtTripFuel');
+    txtTripFuel.innerHTML = "- kg";
+    const txtContFuel = document.getElementById('txtContFuel');
+    txtContFuel.innerHTML = "- kg";
+    const txtAltnFuel = document.getElementById('txtAltnFuel');
+    txtAltnFuel.innerHTML = "- kg";
+    const txtFinResFuel = document.getElementById('txtFinResFuel');
+    txtFinResFuel.innerHTML = "- kg";
+    const txtPlnBlkFuel = document.getElementById('txtPlnBlkFuel');
+    txtPlnBlkFuel.innerHTML = "- kg";
+    const txtFnlBlkFuel = document.getElementById('txtFnlBlkFuel');
+    txtFnlBlkFuel.innerHTML = "- kg";
+
     const inpAltns = document.getElementById('inpAltns');
     inpAltns.disabled = false;
     inpAltns.value = "";
@@ -248,6 +267,10 @@ function GetFuelPlan() {
     inpTankFuel.value = "";
     const butDiscAdd = document.getElementById('butDiscAdd');
     butDiscAdd.disabled = false;
+
+    const discList = document.getElementById('disc_list');
+    while (discList.firstChild)
+        discList.removeChild(discList.firstChild);
 
     if (fuelData == null && flightData == null) {
         inpAltns.disabled = true;
@@ -269,14 +292,14 @@ function GetFuelPlan() {
     if (units == " lb")
         document.getElementById('spnTankFuel').innerHTML = "lb";
 
-    document.getElementById('lblCont').innerHTML = "Contingency: " + flightData.general.cont_rule;
-    document.getElementById('txtTaxiFuel').innerHTML = fuelData.taxi + units;
-    document.getElementById('txtTripFuel').innerHTML = fuelData.enroute_burn + units;
-    document.getElementById('txtAltnFuel').innerHTML = fuelData.alternate_burn + units;
-    document.getElementById('txtContFuel').innerHTML = fuelData.contingency + units;
-    document.getElementById('txtFinResFuel').innerHTML = fuelData.reserve + units;
-    document.getElementById('txtPlnBlkFuel').innerHTML = fuelData.plan_ramp + units;
-    document.getElementById('txtFnlBlkFuel').innerHTML = fuelData.final_ramp + units;
+    lblCont.innerHTML = "Contingency: " + flightData.general.cont_rule;
+    txtTaxiFuel.innerHTML = fuelData.taxi + units;
+    txtTripFuel.innerHTML = fuelData.enroute_burn + units;
+    txtAltnFuel.innerHTML = fuelData.alternate_burn + units;
+    txtContFuel.innerHTML = fuelData.contingency + units;
+    txtFinResFuel.innerHTML = fuelData.reserve + units;
+    txtPlnBlkFuel.innerHTML = fuelData.plan_ramp + units;
+    txtFnlBlkFuel.innerHTML = fuelData.final_ramp + units;
 
     if (fuelData.tank != null && fuelData.tank != "0")
         inpTankFuel.value = fuelData.tank;
@@ -309,9 +332,7 @@ function GetFuelPlan() {
 
     inpTankFuel.addEventListener("keyup", UpdateFuelPlan);
 
-    const discList = document.getElementById('disc_list');
-    while (discList.firstChild)
-        discList.removeChild(discList.firstChild);
+    
 
     if (fuelData.discretionary != null) {
         for (var i = 0; i < fuelData.discretionary.length; i++) {
