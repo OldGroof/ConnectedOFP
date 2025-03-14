@@ -363,6 +363,7 @@ function AddDiscRow(idx) {
     newRow.append(newDel);
 
     var newHeader = document.createElement('h3');
+    newHeader.id = "txtDisc";
     newHeader.innerHTML = "Discretionary";
     newRow.append(newHeader);
 

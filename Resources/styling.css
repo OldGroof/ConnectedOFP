@@ -426,6 +426,10 @@ iframe {
   .table-row h3 {
     font-size: 20px;
   }
+
+  #txtDisc {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 968px) {
