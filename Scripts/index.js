@@ -400,7 +400,8 @@ function AddDiscRow(idx) {
     var newInp = document.createElement('input');
     newInp.id = "inpDiscFuel" + idx.toString();
     newInp.className = "fuel-inp";
-    newInp.type = "number";
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
     newInp.placeholder = "-"
     newInp.maxLength = "6";
     newInp.oninput = function () { this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1'); };
@@ -694,6 +695,7 @@ function UpdateNavLog() {
         let leg = flightData.navlog.fix[i];
         fuel_use = Number(leg.fuel_totalused);
 
+        leg.fuel_min_onboard = (Number(fuelData.min_takeoff) - fuel_use).toString();
         leg.fuel_plan_onboard = (dep_fuel - fuel_use).toString();
 
         leg.fpeto = (atd + Number(leg.time_total)).toString();
@@ -851,7 +853,8 @@ function AddLegRow(std, leg) {
 
     let newInp = document.createElement('input');
     newInp.id = 'inpTime' + leg.ident + eto;
-    newInp.type = 'number';
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
     newInp.placeholder = '-';
     newInp.maxLength = '4';
     newInp.oninput = function () {
@@ -895,7 +898,8 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newLabel);
     newInp = document.createElement('input');
     newInp.id = 'inpFuel' + leg.ident + eto;
-    newInp.type = 'number';
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
     newInp.placeholder = '-';
     newInp.maxLength = '6';
     newInp.oninput = function () {
