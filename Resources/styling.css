@@ -337,6 +337,7 @@ iframe {
 .act-inp {
   float: right;
   margin-left: auto;
+  width: 100px;
   font-size: 20px;
   text-align: right;
   font-weight: 350;
