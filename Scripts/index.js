@@ -276,6 +276,10 @@ function GetFuelPlan() {
     while (discList.firstChild)
         discList.removeChild(discList.firstChild);
 
+    UpdateZFWGauge(0, 1);
+    UpdateTOWGauge(0, 1);
+    UpdateLWGauge(0, 1);
+
     if (fuelData == null && flightData == null) {
         inpAltns.disabled = true;
         inpTankFuel.disabled = true;
@@ -645,6 +649,7 @@ function GetLiveData() {
 
     const inpActFuel = document.getElementById('inpActFuel');
     inpActFuel.disabled = false;
+    inpActFuel.placeholder = "Actual Fuel";
     inpActFuel.value = "";
     const inpOutTime = document.getElementById('inpOut');
     inpOutTime.disabled = false;
