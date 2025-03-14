@@ -363,6 +363,7 @@ function AddDiscRow(idx) {
     newRow.append(newDel);
 
     var newHeader = document.createElement('h3');
+    newHeader.id = "txtDisc";
     newHeader.innerHTML = "Discretionary";
     newRow.append(newHeader);
 
@@ -373,7 +374,7 @@ function AddDiscRow(idx) {
     var optDis = document.createElement('option');
     optDis.disabled = true;
     optDis.value = "";
-    optDis.innerHTML = "None";
+    optDis.innerHTML = "Reason";
     optDis.selected = true;
     optDis.hidden = true;
     newSel.appendChild(optDis);
@@ -581,23 +582,25 @@ function GetLiveData() {
     inp.placeholder = fuelData.final_ramp.toString();
     if (liveData.dep_fuel != "")
         inp.value = liveData.dep_fuel.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.dep_fuel = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.dep_fuel = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
 
     inp = document.getElementById('inpOut');
     if (liveData.out_time != "")
         inp.value = liveData.out_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.out_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.out_time = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -613,12 +616,13 @@ function GetLiveData() {
     inp = document.getElementById('inpOff');
     if (liveData.off_time != "")
         inp.value = liveData.off_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.off_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.off_time = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -634,16 +638,15 @@ function GetLiveData() {
     inp = document.getElementById('inpOn');
     if (liveData.on_time != "")
         inp.value = liveData.on_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.on_time = this.value;
+        let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
+        UpdateLegTime(last_leg, this.value);
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.on_time = this.value;
-
-            let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
-            UpdateLegTime(last_leg, Number(this.value));
-
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -659,12 +662,13 @@ function GetLiveData() {
     inp = document.getElementById('inpIn');
     if (liveData.in_time != "")
         inp.value = liveData.in_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.in_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            liveData.in_time = this.value;
-            UpdateNavLog();
+        if (event.key === 'Enter')
             this.blur();
-        }
     });
     inp.oninput = function () {
         this.value = this.value.replace(/[^0-9]/g, '');
@@ -679,6 +683,7 @@ function GetLiveData() {
 }
 
 function UpdateNavLog() {
+    let min_dep_fuel = Number(fuelData.min_takeoff) - Number(fuelData.contingency);
     let dep_fuel = Number(fuelData.final_ramp);
     if (liveData != null && liveData.dep_fuel != "" && Number(liveData.dep_fuel) != 0)
         dep_fuel = Number(liveData.dep_fuel);
@@ -694,6 +699,7 @@ function UpdateNavLog() {
         let leg = flightData.navlog.fix[i];
         fuel_use = Number(leg.fuel_totalused);
 
+        leg.fuel_min_onboard = (min_dep_fuel - fuel_use).toString();
         leg.fuel_plan_onboard = (dep_fuel - fuel_use).toString();
 
         leg.fpeto = (atd + Number(leg.time_total)).toString();
@@ -757,14 +763,20 @@ function AddLegRow(std, leg) {
     newDiv.style = 'width: 100%; display: flex;';
 
     var newName = document.createElement('div');
-    newName.className = 'leg-name'
-    newName.innerHTML = leg.name;
+    newName.className = 'leg-ident'
+    newName.innerHTML = leg.ident;
     newDiv.appendChild(newName);
 
+    if (leg.ident != leg.name) {
+        newName = document.createElement('div');
+        newName.className = 'leg-name'
+        newName.innerHTML = leg.name;
+        newDiv.appendChild(newName);
+    }
+
     newName = document.createElement('div');
-    newName.className = 'leg-name'
-    newName.innerHTML = leg.ident;
-    newName.style = 'border-right: none;';
+    newName.className = 'leg-airway'
+    newName.innerHTML = leg.via_airway;
     newDiv.appendChild(newName);
 
     newRow.appendChild(newDiv);
@@ -845,8 +857,8 @@ function AddLegRow(std, leg) {
 
     let newInp = document.createElement('input');
     newInp.id = 'inpTime' + leg.ident + eto;
-    newInp.type = 'text';
-    newInp.inputMode = 'numeric';
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
     newInp.placeholder = '-';
     newInp.maxLength = '4';
     newInp.oninput = function () {
@@ -864,21 +876,19 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newInp);
     newDiv.appendChild(newBox);
 
+    newInp.addEventListener('focusout', function (event) {
+        UpdateLegTime(leg, this.value);
+        UpdateInputLabel(this, leg.diff_time);
+    });
     newInp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
-            UpdateLegTime(leg, Number(this.value));
-            UpdateInputLabel(this, leg.diff_time);
-            this.blur();
-
             const nextInput = document.getElementById('inpFuel' + leg.ident + eto);
             if (nextInput && this.value != "")
                 nextInput.focus();
-        } else if (event.key === 'Escape') {
-            if (leg.ato != null)
-                this.value = leg.ato.toString();
             this.blur();
         }
     });
+
     if (leg.diff_time != null)
         UpdateInputLabel(newInp, leg.diff_time);
 
@@ -890,8 +900,8 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newLabel);
     newInp = document.createElement('input');
     newInp.id = 'inpFuel' + leg.ident + eto;
-    newInp.type = 'text';
-    newInp.inputMode = 'numeric';
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
     newInp.placeholder = '-';
     newInp.maxLength = '6';
     newInp.oninput = function () {
@@ -902,17 +912,15 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newInp);
     newDiv.appendChild(newBox);
 
-    newInp.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            UpdateLegFuel(leg, Number(this.value));
-            UpdateInputLabel(this, leg.diff_fuel);
-            this.blur();
-        } else if (event.key === 'Escape') {
-            if (leg.afob != null)
-                this.value = leg.afob.toString();
-            this.blur();
-        }
+    newInp.addEventListener('focusout', function (even) {
+        UpdateLegFuel(leg, Number(this.value));
+        UpdateInputLabel(this, leg.diff_fuel);
     });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter')
+            this.blur();
+    });
+
     if (leg.diff_fuel != null)
         UpdateInputLabel(newInp, leg.diff_fuel);
 
@@ -943,7 +951,7 @@ function AddLegRow(std, leg) {
                 behavior: "instant",
                 block: "start",
             });
-       }, 1);
+        }, 1);
 }
 
 const zeroPad = (num, places) => String(num).padStart(places, '0');
@@ -960,7 +968,7 @@ function UpdateLegTime(leg, time) {
 }
 
 function UpdateLegFuel(leg, fuel) {
-    if (fuel == "") {
+    if (fuel == "" || fuel == 0) {
         delete leg.afob;
         delete leg.diff_fuel;
     } else {

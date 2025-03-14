@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>ConnectedOFP | Navlog</title>
+    <title>ConnectedOFP | OFP</title>
     <link rel="icon" href="../Resources/favicon.ico" type="image/x-icon">
     <meta charset="UTF-8">
     <meta name="author" content="Jacob">
@@ -12,38 +12,37 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </head>
 
-<body onload="GetNavLog()">
+<body onload="GetPDF()">
     <div class="header" style="z-index: 5">
-        <h1>Navlog</h1>
-        <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span
+        <h1>OFP Viewer</h1>
+        <a id="home" style="float: right; margin-left: auto;" href="../"><span
                 class="material-icons">home</span></a>
     </div>
 
-    <div class="bar" style="margin-top: 84px; height: calc(100vh - 185px);">
-        <div id="legList" class="leg-list"></div>
+    <div class="bar" style="margin-top: 84px; display: flex; justify-content: center; height: calc(100dvh - 185px);">
+        <iframe title="OFPViewer" id="outPDF" src=""></iframe>
     </div>
 
     <div class="footer" style="z-index: 5">
         <div style="display: flex; justify-content: center;">
-            <a id="ofp" href="pdf.html">
-                <span class="material-icons" >receipt_long</span>
+            <a id="ofp">
+                <span class="material-icons">receipt_long</span>
                 <p>OFP</p>
             </a>
-            <a id="pln" href="plnfuel.html">
-                <span class="material-icons" >view_in_ar</span>
+            <a id="pln" href="../plnfuel/">
+                <span class="material-icons">view_in_ar</span>
                 <p>Fuel Plan</p>
             </a>
-            <a id="act" href="actfuel.html">
-                <span class="material-icons" >speed</span>
+            <a id="act" href="../actfuel/">
+                <span class="material-icons">speed</span>
                 <p>Actual Fuel</p>
             </a>
-            <a id="nav">
-                <span class="material-icons" >list</span>
+            <a id="nav" href="../navlog/">
+                <span class="material-icons">list</span>
                 <p>Navlog</p>
             </a>
         </div>
     </div>
-
     <div style="height: 65px;"></div>
     <script src="../Scripts/index.js"></script>
 </body>

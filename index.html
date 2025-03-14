@@ -39,31 +39,35 @@
 
     <div class="header">
         <h1>ConnectedOFP</h1>
-        <input type="text" id="inpID" class="input" inputmode="text" value="" placeholder="ID/Username" />
+        <input type="text" id="inpID" class="input" value="" placeholder="ID/Username" />
     </div>
 
     <div class="bar" style="margin-top: 84px;">
         <h2 id="txtFltID" style="border-bottom: 1px solid #bebebe; padding-bottom: 3px;">Flight</h2>
         <div style="display: flex; height: 45%;">
-            <a class="index-button" href="Pages/pdf.html" disabled>
+            <a class="index-button" href="ofp/" disabled>
                 <span class="material-icons" style="font-size: 48px;">receipt_long</span>
                 <p>OFP</p>
             </a>
-            <a class="index-button" href="Pages/navlog.html">
+            <a class="index-button" href="navlog/">
                 <span class="material-icons" style="font-size: 48px;">list</span>
                 <p>Navlog</p>
             </a>
         </div>
         <div style="display: flex; height: 45%;">
-            <a class="index-button" href="Pages/plnfuel.html">
+            <a class="index-button" href="plnfuel/">
                 <span class="material-icons" style="font-size: 48px;">view_in_ar</span>
                 <p>Fuel Planning</p>
             </a>
-            <a class="index-button" href="Pages/actfuel.html">
+            <a class="index-button" href="actfuel/">
                 <span class="material-icons" style="font-size: 48px;">speed</span>
                 <p>Actual Fuel</p>
             </a>
         </div>
+    </div>
+
+    <div style="display: flex; justify-content: center;">
+        <a class="problem" href="https://github.com/OldGroof/ConnectedOFP/issues" target="_blank">Report a problem</a>
     </div>
     <script src="Scripts/index.js"></script>
 </body>

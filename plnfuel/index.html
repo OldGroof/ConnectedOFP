@@ -15,7 +15,7 @@
 <body onload="GetFuelPlan()">
     <div class="header" style="z-index: 5">
         <h1 id="txtPageTitle">Fuel Planning</h1>
-        <a id="home" style="float: right; margin-left: auto;" href="../index.html"><span
+        <a id="home" style="float: right; margin-left: auto;" href="../"><span
                 class="material-icons">home</span></a>
     </div>
 
@@ -51,8 +51,8 @@
                     <div class="table-row">
                         <h3>Tankering</h3>
                         <div class="fuel-inp-div">
-                            <input id="inpTankFuel" class="fuel-inp" type="text" inputmode="numeric" placeholder="-"
-                                maxlength="6"
+                            <input id="inpTankFuel" class="fuel-inp" type="text" placeholder="-"
+                                maxlength="6" inputmode="numeric"
                                 oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
                             </input>
                             <span id="spnTankFuel" class
@@ -93,7 +93,7 @@
 
     <div class="footer" style="z-index: 5">
         <div style="display: flex; justify-content: center;">
-            <a id="ofp" href="pdf.html">
+            <a id="ofp" href="../ofp/">
                 <span class="material-icons">receipt_long</span>
                 <p>OFP</p>
             </a>
@@ -101,11 +101,11 @@
                 <span class="material-icons">view_in_ar</span>
                 <p>Fuel Plan</p>
             </a>
-            <a id="act" href="actfuel.html">
+            <a id="act" href="../actfuel/">
                 <span class="material-icons">speed</span>
                 <p>Actual Fuel</p>
             </a>
-            <a id="nav" href="navlog.html">
+            <a id="nav" href="../navlog/">
                 <span class="material-icons">list</span>
                 <p>Navlog</p>
             </a>

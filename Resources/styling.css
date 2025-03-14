@@ -43,6 +43,19 @@
   outline: none;
 }
 
+.problem {
+  position: fixed;
+  bottom: 20px;
+  color: rgb(78, 78, 78);
+  text-decoration: none;
+  font-size: 20px;
+  text-align: center;
+}
+.problem :visited {
+  color: rgb(78, 78, 78);
+  text-decoration: none;
+}
+
 .footer {
   position: fixed;
   background-color: rgb(255, 255, 255);
@@ -67,6 +80,10 @@
 
 .footer a:hover {
   background: rgb(240, 247, 251);
+}
+
+.footer p {
+  white-space: nowrap;
 }
 
 .table-row {
@@ -210,7 +227,7 @@ h3 {
 }
 
 .fuel-bar {
-  height: calc(100vh - 185px);
+  height: calc(100dvh - 185px);
   margin: 15px 20px;
   padding: 10px;
   background-color: rgb(255, 255, 255);
@@ -333,6 +350,7 @@ iframe {
 .act-inp {
   float: right;
   margin-left: auto;
+  width: 100px;
   font-size: 20px;
   text-align: right;
   font-weight: 350;
@@ -367,16 +385,28 @@ iframe {
   box-shadow: 0px 0px 10px 4px lightgray;
 }
 
-.leg-name {
-  width: 50%;
+.leg-ident {
   padding-left: 5px;
-  float: left;
-  margin-right: auto;
   font-size: 26px;
   font-weight: 450;
   text-align: left;
-  border-right: solid;
-  border-width: 2px;
+}
+
+.leg-name {
+  padding-left: 5px;
+  padding-top: 6px;
+  font-size: 20px;
+  font-weight: 350;
+  text-align: left;
+}
+
+.leg-airway {
+  float: right;
+  margin-left: auto;
+  padding-top: 6px;
+  font-size: 20px;
+  font-weight: 350;
+  text-align: right;
 }
 
 .leg-box {
@@ -417,6 +447,20 @@ iframe {
   bottom: 0px;
   right: 10px;
   pointer-events: none;
+}
+
+@media screen and (max-width: 500px) {
+  .table-row-imp h3,
+  .fuel-val,
+  .fuel-inp,
+  .table-row h3 {
+    font-size: 20px;
+  }
+
+  #txtDisc,
+  .leg-name {
+    display: none;
+  }
 }
 
 @media screen and (max-width: 968px) {
