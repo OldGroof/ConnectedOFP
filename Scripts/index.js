@@ -680,6 +680,7 @@ function GetLiveData() {
 }
 
 function UpdateNavLog() {
+    let min_dep_fuel = Number(fuelData.min_takeoff) - Number(fuelData.contingency);
     let dep_fuel = Number(fuelData.final_ramp);
     if (liveData != null && liveData.dep_fuel != "" && Number(liveData.dep_fuel) != 0)
         dep_fuel = Number(liveData.dep_fuel);
@@ -695,7 +696,7 @@ function UpdateNavLog() {
         let leg = flightData.navlog.fix[i];
         fuel_use = Number(leg.fuel_totalused);
 
-        leg.fuel_min_onboard = (Number(fuelData.min_takeoff) - fuel_use).toString();
+        leg.fuel_min_onboard = (min_dep_fuel - fuel_use).toString();
         leg.fuel_plan_onboard = (dep_fuel - fuel_use).toString();
 
         leg.fpeto = (atd + Number(leg.time_total)).toString();
