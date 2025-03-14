@@ -400,7 +400,7 @@ function AddDiscRow(idx) {
     var newInp = document.createElement('input');
     newInp.id = "inpDiscFuel" + idx.toString();
     newInp.className = "fuel-inp";
-    newInp.type = "text";
+    newInp.type = "number";
     newInp.inputMode = "numeric";
     newInp.placeholder = "-"
     newInp.maxLength = "6";
@@ -852,7 +852,7 @@ function AddLegRow(std, leg) {
 
     let newInp = document.createElement('input');
     newInp.id = 'inpTime' + leg.ident + eto;
-    newInp.type = 'text';
+    newInp.type = 'number';
     newInp.inputMode = 'text';
     newInp.placeholder = '-';
     newInp.maxLength = '4';
@@ -897,7 +897,7 @@ function AddLegRow(std, leg) {
     newBox.appendChild(newLabel);
     newInp = document.createElement('input');
     newInp.id = 'inpFuel' + leg.ident + eto;
-    newInp.type = 'text';
+    newInp.type = 'number';
     newInp.inputMode = 'text';
     newInp.placeholder = '-';
     newInp.maxLength = '6';
