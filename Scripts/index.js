@@ -582,6 +582,10 @@ function GetLiveData() {
     inp.placeholder = fuelData.final_ramp.toString();
     if (liveData.dep_fuel != "")
         inp.value = liveData.dep_fuel.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.dep_fuel = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             liveData.dep_fuel = this.value;
@@ -593,6 +597,10 @@ function GetLiveData() {
     inp = document.getElementById('inpOut');
     if (liveData.out_time != "")
         inp.value = liveData.out_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.out_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             liveData.out_time = this.value;
@@ -614,6 +622,10 @@ function GetLiveData() {
     inp = document.getElementById('inpOff');
     if (liveData.off_time != "")
         inp.value = liveData.off_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.off_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             liveData.off_time = this.value;
@@ -635,6 +647,10 @@ function GetLiveData() {
     inp = document.getElementById('inpOn');
     if (liveData.on_time != "")
         inp.value = liveData.on_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.on_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             liveData.on_time = this.value;
@@ -660,6 +676,10 @@ function GetLiveData() {
     inp = document.getElementById('inpIn');
     if (liveData.in_time != "")
         inp.value = liveData.in_time.toString();
+    inp.addEventListener('focusout', function (event) {
+        liveData.in_time = this.value;
+        UpdateNavLog();
+    });
     inp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
             liveData.in_time = this.value;
@@ -876,7 +896,6 @@ function AddLegRow(std, leg) {
     newInp.addEventListener('focusout', function (event) {
         UpdateLegTime(leg, Number(this.value));
         UpdateInputLabel(this, leg.diff_time);
-        this.blur();
 
         const nextInput = document.getElementById('inpFuel' + leg.ident + eto);
         if (nextInput && this.value != "")
@@ -924,7 +943,6 @@ function AddLegRow(std, leg) {
     newInp.addEventListener('focusout', function (even) {
         UpdateLegFuel(leg, Number(this.value));
         UpdateInputLabel(this, leg.diff_fuel);
-        this.blur();
     });
     newInp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter') {
