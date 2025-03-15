@@ -1,11 +1,4 @@
 const inpID = document.getElementById('inpID');
-inpID.addEventListener('keydown', function (event) {
-    if (event.key === 'Enter') {
-        const inputValue = inpID.value;
-        SetSimbriefID(inputValue);
-        inpID.blur();
-    }
-});
 
 const outPDF = document.getElementById('outPDF');
 
@@ -121,6 +114,14 @@ function GoNavLog() {
 }
 
 function LoadPage() {
+    inpID.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const inputValue = inpID.value;
+            SetSimbriefID(inputValue);
+            inpID.blur();
+        }
+    });
+
     let id_cookie = getCookie("simbrief_id");
     if (id_cookie != "")
         smbrfID = id_cookie;
@@ -796,6 +797,9 @@ function GetNavLog() {
     const legList = document.getElementById('legList');
     while (legList.firstChild)
         legList.removeChild(legList.firstChild);
+
+    if (flightData == null || isEmpty(flightData))
+        return;
 
     UpdateNavLog();
 
