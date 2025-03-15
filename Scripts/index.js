@@ -1,19 +1,39 @@
-const inputElement = document.getElementById('inpID');
-if (inputElement != null) {
-    inputElement.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter') {
-            const inputValue = inputElement.value;
-            SetSimbriefID(inputValue);
-            inputElement.blur();
-        }
-    });
-}
+const inpID = document.getElementById('inpID');
+inpID.addEventListener('keydown', function (event) {
+    if (event.key === 'Enter') {
+        const inputValue = inpID.value;
+        SetSimbriefID(inputValue);
+        inpID.blur();
+    }
+});
+
+const outPDF = document.getElementById('outPDF');
+
+const divFuel = document.getElementById('divFuel');
+const txtTaxiFuel = document.getElementById('txtTaxiFuel');
+const txtTripFuel = document.getElementById('txtTripFuel');
+const lblCont = document.getElementById('lblCont');
+const txtContFuel = document.getElementById('txtContFuel');
+const inpAltns = document.getElementById('inpAltns');
+const txtAltnFuel = document.getElementById('txtAltnFuel');
+const txtFinResFuel = document.getElementById('txtFinResFuel');
+const txtPlnBlkFuel = document.getElementById('txtPlnBlkFuel');
+const inpTankFuel = document.getElementById('inpTankFuel');
+const spnTankFuel = document.getElementById('spnTankFuel');
+const discList = document.getElementById('disc_list');
+const butDiscAdd = document.getElementById('butDiscAdd');
+const txtFnlBlkFuel = document.getElementById('txtFnlBlkFuel');
+
+const inpActFuel = document.getElementById('inpActFuel');
+const inpOutTime = document.getElementById('inpOut');
+const inpOffTime = document.getElementById('inpOff');
+const inpOnTime = document.getElementById('inpOn');
+const inpInTime = document.getElementById('inpIn');
 
 var smbrfID = "";
 var units = " kg"
-var flightData = JSON.parse(sessionStorage.getItem('flight_data'));
-var fuelData = JSON.parse(localStorage.getItem('fuel_data'));
-
+var flightData;
+var fuelData;
 var liveData;
 
 function setCookie(cname, cvalue, exdays) {
@@ -42,6 +62,13 @@ function isEmpty(obj) {
     return Object.keys(obj).length === 0;
 }
 
+function FormatDate(seconds) {
+    const date = new Date(seconds * 1000);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
+    return `${day}${month}`;
+}
+
 function GoHome() {
     document.getElementById('divOFP').style = "display: none;";
     document.getElementById('divPlnFuel').style = "display: none;";
@@ -60,7 +87,6 @@ function GoOFP() {
 
 
     document.getElementById('divOFP').style = "display: block;";
-    // GetPDF();
 }
 
 function GoPlnFuel() {
@@ -71,7 +97,6 @@ function GoPlnFuel() {
 
 
     document.getElementById('divPlnFuel').style = "display: block;";
-    // GetFuelPlan();
 }
 
 function GoActFuel() {
@@ -82,7 +107,6 @@ function GoActFuel() {
 
 
     document.getElementById('divActFuel').style = "display: block;";
-    // GetLiveData();
 }
 
 function GoNavLog() {
@@ -93,7 +117,7 @@ function GoNavLog() {
 
 
     document.getElementById('divNavLog').style = "display: block;";
-    // GetNavLog();
+    GetNavLog();
 }
 
 function LoadPage() {
@@ -106,7 +130,7 @@ function LoadPage() {
         console.error("There is no Simbrief ID.");
         return;
     }
-    document.getElementById("inpID").value = smbrfID;
+    inpID.value = smbrfID;
 
     flightData = JSON.parse(localStorage.getItem('flight_data'));
     fuelData = JSON.parse(localStorage.getItem('fuel_data'));
@@ -128,93 +152,102 @@ function LoadPage() {
 
     GetPDF();
     GetFuelPlan();
-    GetLiveData();
+    GetActFuel();
     GetNavLog();
 }
 
+function ResetPage() {
+    console.log('ResetPage');
+
+    ResetPDF();
+    ResetFuelPlan();
+    ResetLiveData();
+    ResetNavlog();
+}
+function ResetPDF() {
+    console.log('ResetPDF');
+
+    outPDF.src = "";
+}
+function ResetFuelPlan() {
+    console.log('ResetFuelPlan');
+
+    txtTaxiFuel.innerHTML = "- kg";
+    txtTripFuel.innerHTML = "- kg";
+    lblCont.innerHTML = "Contingency:";
+    txtContFuel.innerHTML = "- kg";
+    while (inpAltns.firstChild)
+        inpAltns.removeChild(inpAltns.firstChild);
+    txtAltnFuel.innerHTML = "- kg";
+    txtFinResFuel.innerHTML = "- kg";
+    txtPlnBlkFuel.innerHTML = "- kg";
+    txtFnlBlkFuel.innerHTML = "- kg";
+
+    inpAltns.disabled = true;
+    inpAltns.value = "";
+    inpTankFuel.disabled = true;
+    inpTankFuel.value = "";
+    butDiscAdd.disabled = true;
+
+    while (discList.firstChild)
+        discList.removeChild(discList.firstChild);
+
+    UpdateZFWGauge(0, 1);
+    UpdateTOWGauge(0, 1);
+    UpdateLWGauge(0, 1);
+}
+function ResetLiveData() {
+    console.log('ResetLiveData');
+
+    inpActFuel.disabled = true;
+    inpActFuel.placeholder = "Actual Fuel";
+    inpActFuel.value = "";
+    inpOutTime.disabled = true;
+    inpOutTime.value = "";
+    inpOffTime.disabled = true;
+    inpOffTime.value = "";
+    inpOnTime.disabled = true;
+    inpOnTime.value = "";
+    inpInTime.disabled = true;
+    inpInTime.value = "";
+}
+function ResetNavlog() {
+    console.log('ResetNavlog');
+
+    const legList = document.getElementById('legList');
+    while (legList.firstChild)
+        legList.removeChild(legList.firstChild);
+}
+
+function ResetData() {
+    console.log('ResetData');
+
+    flightData = {};
+    fuelData = {};
+    liveData = {};
+    units = " kg";
+    localStorage.removeItem('flight_data');
+    localStorage.removeItem('fuel_data');
+    localStorage.removeItem('live_data');
+
+    inpID.value = "";
+    document.getElementById("txtFltID").innerHTML = "Flight";
+    smbrfID = "";
+    document.cookie = "simbrief_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+}
+
 function SetSimbriefID(id) {
-    if (id != null && id != 0) {
+    if (id != null && id != "") {
         smbrfID = id;
         setCookie("simbrief_id", smbrfID, 30);
 
-        RefreshOFP();
-    } else {
-        smbrfID = "";
-        ResetLocalData();
-    }
-}
-
-function GetSimbriefOFP() {
-    let id_cookie = getCookie("simbrief_id");
-    if (id_cookie != "")
-        smbrfID = id_cookie;
-    else smbrfID = "";
-
-    if (smbrfID == "") {
-        console.error("There is no Simbrief ID.");
-        ResetData();
-        return;
-    }
-    document.getElementById("inpID").value = smbrfID;
-
-    GetFlightDataLocal();
-
-    if (flightData == null || isEmpty(flightData)) {
+        ResetPage();
         FetchSimbriefAPI();
     } else {
-        let date = FormatDate(flightData.api_params.date);
-        let fltID = "Flight - ";
-        if (!isEmpty(flightData.general.icao_airline))
-            fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
-        else
-            fltID = "Flight - " + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
-
-        fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
-        console.log(fltID);
-        document.getElementById("txtFltID").innerHTML = fltID;
-
-        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
+        smbrfID = "";
+        ResetData();
+        ResetPage();
     }
-}
-
-function RefreshOFP() {
-    if (smbrfID == "") {
-        console.error("There is no Simbrief ID.");
-        ResetLocalData();
-        return;
-    }
-    FetchSimbriefAPI();
-}
-
-function FormatDate(seconds) {
-    const date = new Date(seconds * 1000);
-    const day = String(date.getDate()).padStart(2, '0');
-    const month = date.toLocaleString('en-US', { month: 'short' }).toUpperCase();
-    return `${day}${month}`;
-}
-
-function SetFlightData(data) {
-    localStorage.setItem('flight_data', JSON.stringify(data));
-    sessionStorage.setItem('flight_data', JSON.stringify(data));
-    flightData = data;
-
-    localStorage.removeItem('fuel_data');
-    fuelData = flightData.fuel;
-    localStorage.setItem('fuel_data', JSON.stringify(fuelData));
-
-    localStorage.removeItem('live_data');
-    liveData = null;
-
-    let date = FormatDate(flightData.api_params.date);
-    let fltID = "Flight - ";
-    if (!isEmpty(flightData.general.icao_airline))
-        fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
-    else
-        fltID = "Flight - " + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
-
-    fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
-    console.log(fltID);
-    document.getElementById("txtFltID").innerHTML = fltID;
 }
 
 function FetchSimbriefAPI() {
@@ -242,124 +275,66 @@ function FetchSimbriefAPI() {
         });
 }
 
-function ResetData() {
-    flightData = {};
-    fuelData = {};
-    liveData = {};
-    units = " kg";
-    sessionStorage.removeItem('flight_data');
-    localStorage.removeItem('flight_data');
-    localStorage.removeItem('fuel_data');
-    localStorage.removeItem('live_data');
-    document.getElementById("inpID").value = "";
-    document.getElementById("txtFltID").innerHTML = "Flight";
-    document.cookie = "simbrief_id=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
-}
+function SetFlightData(data) {
+    flightData = data;
 
-
-function GetFlightDataLocal() {
-    flightData = JSON.parse(localStorage.getItem('flight_data'));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
-
-    GetPDF();
-
-    // get fuel plan
-
-    // get actual fuel
-
-    // get navlog
-}
-
-function GetPDF() {
-    if (flightData == null || isEmpty(flightData))
-        GetFlightDataLocal();
-
-    const pfdEmbed = document.getElementById('outPDF');
-    if (flightData == null) {
-        pfdEmbed.src = "";
-        return;
-    }
-
-    const dir = "https://docs.google.com/gview?url=" + flightData.files.directory + flightData.files.pdf.link + "&embedded=true";
-    pfdEmbed.src = dir;
-}
-
-function GetFuelPlan() {
-    if (flightData == null || isEmpty(flightData))
-        GetFlightDataLocal();
-    if (fuelData == null || isEmpty(fuelData))
-        fuelData = JSON.parse(localStorage.getItem('fuel_data'));
-
-    const lblCont = document.getElementById('lblCont');
-    lblCont.innerHTML = "Contingency:";
-
-    const txtTaxiFuel = document.getElementById('txtTaxiFuel');
-    txtTaxiFuel.innerHTML = "- kg";
-    const txtTripFuel = document.getElementById('txtTripFuel');
-    txtTripFuel.innerHTML = "- kg";
-    const txtContFuel = document.getElementById('txtContFuel');
-    txtContFuel.innerHTML = "- kg";
-    const txtAltnFuel = document.getElementById('txtAltnFuel');
-    txtAltnFuel.innerHTML = "- kg";
-    const txtFinResFuel = document.getElementById('txtFinResFuel');
-    txtFinResFuel.innerHTML = "- kg";
-    const txtPlnBlkFuel = document.getElementById('txtPlnBlkFuel');
-    txtPlnBlkFuel.innerHTML = "- kg";
-    const txtFnlBlkFuel = document.getElementById('txtFnlBlkFuel');
-    txtFnlBlkFuel.innerHTML = "- kg";
-
-    const inpAltns = document.getElementById('inpAltns');
-    inpAltns.disabled = false;
-    inpAltns.value = "";
-    const inpTankFuel = document.getElementById('inpTankFuel');
-    inpTankFuel.disabled = false;
-    inpTankFuel.value = "";
-    const butDiscAdd = document.getElementById('butDiscAdd');
-    butDiscAdd.disabled = false;
-
-    const discList = document.getElementById('disc_list');
-    while (discList.firstChild)
-        discList.removeChild(discList.firstChild);
-
-    UpdateZFWGauge(0, 1);
-    UpdateTOWGauge(0, 1);
-    UpdateLWGauge(0, 1);
-
-    if (fuelData == null && flightData == null) {
-        inpAltns.disabled = true;
-        inpTankFuel.disabled = true;
-        butDiscAdd.disabled = true;
-        return;
-    }
-
-    if (fuelData.tank == null)
-        fuelData.tank = 0;
-    if (fuelData.final_ramp == null)
-        fuelData.final_ramp = Number(fuelData.plan_ramp);
-
+    fuelData = flightData.fuel;
+    fuelData.tank = "0";
+    fuelData.final_ramp = fuelData.plan_ramp;
     if (flightData.params.units == "kgs")
         units = " kg";
     else
         units = " lb";
 
-    if (units == " lb")
-        document.getElementById('spnTankFuel').innerHTML = "lb";
+    liveData = {
+        dep_fuel: "",
+        out_time: "",
+        off_time: "",
+        on_time: "",
+        in_time: ""
+    };
 
-    lblCont.innerHTML = "Contingency: " + flightData.general.cont_rule;
+    localStorage.setItem('flight_data', JSON.stringify(flightData));
+    localStorage.setItem('fuel_data', JSON.stringify(fuelData));
+    localStorage.setItem('live_data', JSON.stringify(liveData));
+
+    let date = FormatDate(flightData.api_params.date);
+    let fltID = "Flight - ";
+    if (!isEmpty(flightData.general.icao_airline))
+        fltID = "Flight - #" + flightData.general.icao_airline + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+    else
+        fltID = "Flight - " + flightData.general.flight_number + "/" + date + "(" + flightData.general.release + ")";
+
+    fltID += ": " + flightData.origin.iata_code + "-" + flightData.destination.iata_code;
+    console.log(fltID);
+    document.getElementById("txtFltID").innerHTML = fltID;
+
+    GetPDF();
+    GetFuelPlan();
+    GetActFuel();
+    GetNavLog();
+}
+
+function GetPDF() {
+    console.log('GetPDF.');
+
+    const dir = "https://docs.google.com/gview?url=" + flightData.files.directory + flightData.files.pdf.link + "&embedded=true";
+    outPDF.src = dir;
+}
+
+function GetFuelPlan() {
+    console.log('GetFuelPlan');
+
     txtTaxiFuel.innerHTML = fuelData.taxi + units;
     txtTripFuel.innerHTML = fuelData.enroute_burn + units;
     txtAltnFuel.innerHTML = fuelData.alternate_burn + units;
+    lblCont.innerHTML = "Contingency: " + flightData.general.cont_rule;
     txtContFuel.innerHTML = fuelData.contingency + units;
     txtFinResFuel.innerHTML = fuelData.reserve + units;
     txtPlnBlkFuel.innerHTML = fuelData.plan_ramp + units;
     txtFnlBlkFuel.innerHTML = fuelData.final_ramp + units;
 
-    if (fuelData.tank != null && fuelData.tank != "0")
-        inpTankFuel.value = fuelData.tank;
-
-    while (inpAltns.firstChild)
-        inpAltns.removeChild(inpAltns.firstChild);
-
+    inpAltns.disabled = false;
     inpAltns.addEventListener("change", UpdateFuelPlan);
     if (flightData.alternate.length == null) {
         let obj = flightData.alternate;
@@ -383,9 +358,12 @@ function GetFuelPlan() {
     if (inpAltns.options.length == 0)
         inpAltns.disabled = true;
 
+    inpTankFuel.disabled = false;
     inpTankFuel.addEventListener("keyup", UpdateFuelPlan);
-
-    
+    if (fuelData.tank != null && fuelData.tank != "0")
+        inpTankFuel.value = fuelData.tank;
+    if (units == " lb")
+        spnTankFuel.innerHTML = "lb";
 
     if (fuelData.discretionary != null) {
         for (var i = 0; i < fuelData.discretionary.length; i++) {
@@ -393,11 +371,12 @@ function GetFuelPlan() {
 
             AddDiscRow(i);
             document.getElementById('inpDiscRes' + i.toString()).value = disc.reason;
-            inp = document.getElementById('inpDiscFuel' + i.toString());
+            const inp = document.getElementById('inpDiscFuel' + i.toString());
             if (disc.amount != "0")
                 inp.value = disc.amount;
         }
     }
+    butDiscAdd.disabled = false;
 
     let zfw = Number(flightData.weights.est_zfw);
     flightData.weights.est_tow = zfw + (Number(fuelData.final_ramp) - Number(fuelData.taxi));
@@ -406,44 +385,38 @@ function GetFuelPlan() {
     UpdateZFWGauge(flightData.weights.est_zfw, flightData.weights.max_zfw);
     UpdateTOWGauge(flightData.weights.est_tow, flightData.weights.max_tow);
     UpdateLWGauge(flightData.weights.est_ldw, flightData.weights.max_ldw);
-
-    localStorage.setItem('flight_data', JSON.stringify(flightData));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
 }
 
 function UpdateFuelPlan() {
-    // update alternate fuel
     if (flightData.alternate.length == null) {
         fuelData.alternate_burn = flightData.alternate.burn;
     } else {
-        const select = document.getElementById('inpAltns');
-        fuelData.alternate_burn = flightData.alternate[select.value].burn;
-        flightData.select_alternate = select.value.toString();
-
-        localStorage.setItem('flight_data', JSON.stringify(flightData));
-        sessionStorage.setItem('flight_data', JSON.stringify(flightData));
+        fuelData.alternate_burn = flightData.alternate[inpAltns.value].burn;
+        flightData.select_alternate = inpAltns.value.toString();
     }
-    document.getElementById('txtAltnFuel').innerHTML = fuelData.alternate_burn + units;
+    txtAltnFuel.innerHTML = fuelData.alternate_burn + units;
 
     // update min_takeoff
-    fuelData.min_takeoff = Number(fuelData.enroute_burn) + Number(fuelData.contingency)
+    let min_takeoff = Number(fuelData.enroute_burn) + Number(fuelData.contingency)
         + Number(fuelData.alternate_burn) + Number(fuelData.reserve)
         + Number(fuelData.etops) + Number(fuelData.extra)
         + Number(fuelData.extra_required) + Number(fuelData.extra_optional);
+    fuelData.min_takeoff = min_takeoff.toString();
 
     // update plan_takeoff
     fuelData.plan_takeoff = fuelData.min_takeoff;
     // update plan_ramp
-    fuelData.plan_ramp = Number(fuelData.plan_takeoff) + Number(fuelData.taxi);
+    let plan_ramp = Number(fuelData.plan_takeoff) + Number(fuelData.taxi);
+    fuelData.plan_ramp = plan_ramp.toString();
     // update plan_landing
-    fuelData.plan_landing = Number(fuelData.plan_takeoff) - Number(fuelData.enroute_burn);
+    let plan_landing = Number(fuelData.plan_takeoff) - Number(fuelData.enroute_burn);
+    fuelData.plan_landing = plan_landing.toString();
 
-    document.getElementById('txtPlnBlkFuel').innerHTML = fuelData.plan_ramp + units;
+    txtPlnBlkFuel.innerHTML = fuelData.plan_ramp + units;
 
     // update tankering value
-    const inp = document.getElementById("inpTankFuel");
-    if (inp.value != "") {
-        fuelData.tank = inp.value.toString();
+    if (inpTankFuel.value != "") {
+        fuelData.tank = inpTankFuel.value.toString();
     } else {
         fuelData.tank = "0";
     }
@@ -474,8 +447,9 @@ function UpdateFuelPlan() {
     }
 
     fuelData.final_ramp += disc;
+    fuelData.final_ramp = fuelData.final_ramp.toString();
 
-    document.getElementById('txtFnlBlkFuel').innerHTML = fuelData.final_ramp + units;
+    txtFnlBlkFuel.innerHTML = fuelData.final_ramp + units;
 
     let zfw = Number(flightData.weights.est_zfw);
     flightData.weights.est_tow = zfw + (Number(fuelData.final_ramp) - Number(fuelData.taxi));
@@ -485,8 +459,9 @@ function UpdateFuelPlan() {
     UpdateTOWGauge(flightData.weights.est_tow, flightData.weights.max_tow);
     UpdateLWGauge(flightData.weights.est_ldw, flightData.weights.max_ldw);
 
+    inpActFuel.placeholder = fuelData.final_ramp.toString();
+
     localStorage.setItem('flight_data', JSON.stringify(flightData));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 }
 
@@ -582,8 +557,7 @@ function AddDiscFuel() {
 
     AddDiscRow(fuelData.discretionary.length - 1);
 
-    const div = document.getElementById('divFuel');
-    div.scrollTop = div.scrollHeight;
+    divFuel.scrollTop = divFuel.scrollHeight;
 
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 }
@@ -682,57 +656,10 @@ function UpdateLWGauge(val, max_val) {
     el.innerHTML = percent + "%";
 }
 
-function GetLiveData() {
-    if (flightData == null || isEmpty(flightData))
-        GetFlightDataLocal();
-    if (fuelData == null || isEmpty(fuelData))
-        fuelData = JSON.parse(localStorage.getItem('fuel_data'));
+function GetActFuel() {
+    console.log('GetActFuel');
 
-    liveData = JSON.parse(localStorage.getItem('live_data'));
-    if (liveData == null || isEmpty(liveData))
-        liveData = {};
-
-    const inpActFuel = document.getElementById('inpActFuel');
     inpActFuel.disabled = false;
-    inpActFuel.placeholder = "Actual Fuel";
-    inpActFuel.value = "";
-    const inpOutTime = document.getElementById('inpOut');
-    inpOutTime.disabled = false;
-    inpOutTime.value = "";
-    const inpOffTime = document.getElementById('inpOff');
-    inpOffTime.disabled = false;
-    inpOffTime.value = "";
-    const inpOnTime = document.getElementById('inpOn');
-    inpOnTime.disabled = false;
-    inpOnTime.value = "";
-    const inpInTime = document.getElementById('inpIn');
-    inpInTime.disabled = false;
-    inpInTime.value = "";
-    if (flightData == null || fuelData == null) {
-        inpActFuel.disabled = true;
-        inpOutTime.disabled = true;
-        inpOffTime.disabled = true;
-        inpOnTime.disabled = true;
-        inpInTime.disabled = true;
-        return;
-    }
-
-    if (fuelData.tank == null)
-        fuelData.tank = 0;
-    if (fuelData.final_ramp == null)
-        fuelData.final_ramp = Number(fuelData.plan_ramp);
-
-    if (liveData.dep_fuel == null)
-        liveData.dep_fuel = "";
-    if (liveData.out_time == null)
-        liveData.out_time = "";
-    if (liveData.off_time == null)
-        liveData.off_time = "";
-    if (liveData.on_time == null)
-        liveData.on_time = "";
-    if (liveData.in_time == null)
-        liveData.in_time = "";
-
     inpActFuel.placeholder = fuelData.final_ramp.toString();
     if (liveData.dep_fuel != "")
         inpActFuel.value = liveData.dep_fuel.toString();
@@ -745,6 +672,7 @@ function GetLiveData() {
             this.blur();
     });
 
+    inpOutTime.disabled = false;
     if (liveData.out_time != "")
         inpOutTime.value = liveData.out_time.toString();
     inpOutTime.addEventListener('focusout', function (event) {
@@ -766,6 +694,7 @@ function GetLiveData() {
         }
     };
 
+    inpOffTime.disabled = false;
     if (liveData.off_time != "")
         inpOffTime.value = liveData.off_time.toString();
     inpOffTime.addEventListener('focusout', function (event) {
@@ -787,6 +716,7 @@ function GetLiveData() {
         }
     };
 
+    inpOnTime.disabled = false;
     if (liveData.on_time != "")
         inpOnTime.value = liveData.on_time.toString();
     inpOnTime.addEventListener('focusout', function (event) {
@@ -810,6 +740,7 @@ function GetLiveData() {
         }
     };
 
+    inpInTime.disabled = false;
     if (liveData.in_time != "")
         inpInTime.value = liveData.in_time.toString();
     inpInTime.addEventListener('focusout', function (event) {
@@ -856,32 +787,19 @@ function UpdateNavLog() {
     }
 
     localStorage.setItem('flight_data', JSON.stringify(flightData));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
     localStorage.setItem('live_data', JSON.stringify(liveData));
 }
 
 function GetNavLog() {
-    if (flightData == null || isEmpty(flightData))
-        GetFlightDataLocal();
-    if (fuelData == null || isEmpty(fuelData))
-        fuelData = JSON.parse(localStorage.getItem('fuel_data'));
-    liveData = JSON.parse(localStorage.getItem('live_data'));
+    console.log('GetNavLog');
 
     const legList = document.getElementById('legList');
     while (legList.firstChild)
         legList.removeChild(legList.firstChild);
 
-    if (flightData == null || fuelData == null) return;
-
-    if (fuelData.tank == null)
-        fuelData.tank = 0;
-    if (fuelData.final_ramp == null)
-        fuelData.final_ramp = Number(fuelData.plan_ramp);
-
     UpdateNavLog();
 
     let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
-
     for (let i = 0; i < flightData.navlog.fix.length; i++) {
         let leg = flightData.navlog.fix[i];
 
@@ -1118,7 +1036,6 @@ function UpdateLegTime(leg, time) {
     }
 
     localStorage.setItem('flight_data', JSON.stringify(flightData));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
 }
 
 function UpdateLegFuel(leg, fuel) {
@@ -1133,7 +1050,6 @@ function UpdateLegFuel(leg, fuel) {
     }
 
     localStorage.setItem('flight_data', JSON.stringify(flightData));
-    sessionStorage.setItem('flight_data', JSON.stringify(flightData));
 }
 
 function UpdateInputLabel(input, diff) {
