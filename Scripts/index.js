@@ -4,18 +4,26 @@ const outPDF = document.getElementById('outPDF');
 
 const divFuel = document.getElementById('divFuel');
 const txtTaxiFuel = document.getElementById('txtTaxiFuel');
+const txtTaxiTime = document.getElementById('txtTaxiTime');
 const txtTripFuel = document.getElementById('txtTripFuel');
+const txtTripTime = document.getElementById('txtTripTime');
 const lblCont = document.getElementById('lblCont');
 const txtContFuel = document.getElementById('txtContFuel');
+const txtContTime = document.getElementById('txtContTime');
 const inpAltns = document.getElementById('inpAltns');
 const txtAltnFuel = document.getElementById('txtAltnFuel');
+const txtAltnTime = document.getElementById('txtAltnTime');
 const txtFinResFuel = document.getElementById('txtFinResFuel');
+const txtResTime = document.getElementById('txtResTime');
 const txtPlnBlkFuel = document.getElementById('txtPlnBlkFuel');
+const txtPlanTime = document.getElementById('txtPlanTime');
 const inpTankFuel = document.getElementById('inpTankFuel');
 const spnTankFuel = document.getElementById('spnTankFuel');
+const txtTankTime = document.getElementById('txtTankTime');
 const discList = document.getElementById('disc_list');
 const butDiscAdd = document.getElementById('butDiscAdd');
 const txtFnlBlkFuel = document.getElementById('txtFnlBlkFuel');
+const txtFinalTime = document.getElementById('txtFinalTime');
 
 const inpActFuel = document.getElementById('inpActFuel');
 const inpOutTime = document.getElementById('inpOut');
@@ -174,15 +182,22 @@ function ResetFuelPlan() {
     console.log('ResetFuelPlan');
 
     txtTaxiFuel.innerHTML = "- kg";
+    txtTaxiTime.innerHTML = "00:00";
     txtTripFuel.innerHTML = "- kg";
+    txtTripTime.innerHTML = "00:00";
     lblCont.innerHTML = "Contingency:";
     txtContFuel.innerHTML = "- kg";
+    txtContTime.innerHTML = "00:00";
     while (inpAltns.firstChild)
         inpAltns.removeChild(inpAltns.firstChild);
     txtAltnFuel.innerHTML = "- kg";
+    txtAltnTime.innerHTML = "00:00";
     txtFinResFuel.innerHTML = "- kg";
+    txtResTime.innerHTML = "00:00";
     txtPlnBlkFuel.innerHTML = "- kg";
+    txtPlanTime.innerHTML = "00:00";
     txtFnlBlkFuel.innerHTML = "- kg";
+    txtFinalTime.innerHTML = "00:00";
 
     inpAltns.disabled = true;
     inpAltns.value = "";
@@ -323,15 +338,27 @@ function GetPDF() {
     outPDF.src = dir;
 }
 
+function FormatFuelTime(seconds) {
+    let hours = Math.floor(seconds / 3600);
+    let minutes = Math.floor((seconds % 3600) / 60);
+    let HH = String(hours).padStart(2, '0');
+    let MM = String(minutes).padStart(2, '0');
+    return `${HH}:${MM}`;
+}
+
 function GetFuelPlan() {
     console.log('GetFuelPlan');
 
     txtTaxiFuel.innerHTML = fuelData.taxi + units;
+    txtTaxiTime.innerHTML = FormatFuelTime(flightData.times.taxi_out);
     txtTripFuel.innerHTML = fuelData.enroute_burn + units;
+    txtTripTime.innerHTML = FormatFuelTime(flightData.times.est_time_enroute);
     txtAltnFuel.innerHTML = fuelData.alternate_burn + units;
     lblCont.innerHTML = "Contingency: " + flightData.general.cont_rule;
     txtContFuel.innerHTML = fuelData.contingency + units;
+    txtContTime.innerHTML = FormatFuelTime(flightData.times.contfuel_time);
     txtFinResFuel.innerHTML = fuelData.reserve + units;
+    txtResTime.innerHTML = FormatFuelTime(flightData.times.reserve_time);
     txtPlnBlkFuel.innerHTML = fuelData.plan_ramp + units;
     txtFnlBlkFuel.innerHTML = fuelData.final_ramp + units;
 
@@ -352,12 +379,24 @@ function GetFuelPlan() {
             opt.value = i;
             opt.innerHTML = obj.icao_code;
             inpAltns.appendChild(opt);
-            if (flightData.select_alternate == i)
+            if (flightData.select_alternate == i) {
                 inpAltns.value = i;
+            }
         }
     }
     if (inpAltns.options.length == 0)
         inpAltns.disabled = true;
+
+    let selAltn = 0;
+    if (flightData.select_alternate != null)
+        selAltn = flightData.select_alternate;
+    txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
+
+    let plnTime = 0;
+    plnTime = Number(flightData.times.taxi_out) + Number(flightData.times.est_time_enroute) + Number(flightData.times.contfuel_time) + Number(flightData.times.reserve_time);
+    plnTime += Number(flightData.alternate[selAltn].ete);
+    flightData.times.endurance = plnTime.toString();
+    txtPlanTime.innerHTML = FormatFuelTime(flightData.times.endurance);
 
     inpTankFuel.disabled = false;
     inpTankFuel.addEventListener("keyup", UpdateFuelPlan);
@@ -366,6 +405,14 @@ function GetFuelPlan() {
     if (units == " lb")
         spnTankFuel.innerHTML = "lb";
 
+    let tankTime = 0;
+    if (fuelData.tank != "0") {
+        tankTime = fuelData.tank / fuelData.avg_fuel_flow;
+        tankTime *= (60 * 60);
+    }
+    txtTankTime.innerHTML = FormatFuelTime(tankTime);
+
+    let disc_total_time = 0;
     if (fuelData.discretionary != null) {
         for (var i = 0; i < fuelData.discretionary.length; i++) {
             let disc = fuelData.discretionary[i];
@@ -375,9 +422,22 @@ function GetFuelPlan() {
             const inp = document.getElementById('inpDiscFuel' + i.toString());
             if (disc.amount != "0")
                 inp.value = disc.amount;
+
+            let discTime = document.getElementById("txtDiscTime" + i.toString());
+            let time = 0;
+            if (fuelData.discretionary[i].amount != "0") {
+                time = fuelData.discretionary[i].amount / fuelData.avg_fuel_flow;
+                time *= (60 * 60);
+                disc_total_time += time;
+            }
+            discTime.innerHTML = FormatFuelTime(time);
         }
     }
     butDiscAdd.disabled = false;
+
+    let finalTime = plnTime;
+    finalTime += tankTime + disc_total_time;
+    txtFinalTime.innerHTML = FormatFuelTime(finalTime);
 
     let zfw = Number(flightData.weights.est_zfw);
     flightData.weights.est_tow = zfw + (Number(fuelData.final_ramp) - Number(fuelData.taxi));
@@ -415,6 +475,17 @@ function UpdateFuelPlan() {
 
     txtPlnBlkFuel.innerHTML = fuelData.plan_ramp + units;
 
+    let selAltn = 0;
+    if (flightData.select_alternate != null)
+        selAltn = flightData.select_alternate;
+    txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
+
+    let plnTime = 0;
+    plnTime = Number(flightData.times.taxi_out) + Number(flightData.times.est_time_enroute) + Number(flightData.times.contfuel_time) + Number(flightData.times.reserve_time);
+    plnTime += Number(flightData.alternate[selAltn].ete);
+    flightData.times.endurance = plnTime.toString();
+    txtPlanTime.innerHTML = FormatFuelTime(flightData.times.endurance);
+
     // update tankering value
     if (inpTankFuel.value != "") {
         fuelData.tank = inpTankFuel.value.toString();
@@ -422,11 +493,20 @@ function UpdateFuelPlan() {
         fuelData.tank = "0";
     }
 
+    let tankTime = 0;
+    if (fuelData.tank != "0") {
+        tankTime = fuelData.tank / fuelData.avg_fuel_flow;
+        tankTime *= (60 * 60);
+    }
+    txtTankTime.innerHTML = FormatFuelTime(tankTime);
+
     // update disc fuels
+    let disc_total_time = 0;
     if (fuelData.discretionary != null) {
         for (var i = 0; i < fuelData.discretionary.length; i++) {
             let discSel = document.getElementById("inpDiscRes" + i.toString());
             let discInp = document.getElementById("inpDiscFuel" + i.toString());
+            let discTime = document.getElementById("txtDiscTime" + i.toString());
 
             discSel.reason = fuelData.discretionary[i].reason;
             if (discInp.value != "") {
@@ -434,6 +514,14 @@ function UpdateFuelPlan() {
             } else {
                 fuelData.discretionary[i].amount = "0";
             }
+
+            let time = 0;
+            if (fuelData.discretionary[i].amount != "0") {
+                time = fuelData.discretionary[i].amount / fuelData.avg_fuel_flow;
+                time *= (60 * 60);
+                disc_total_time += time;
+            }
+            discTime.innerHTML = FormatFuelTime(time);
         }
     }
 
@@ -451,6 +539,10 @@ function UpdateFuelPlan() {
     fuelData.final_ramp = fuelData.final_ramp.toString();
 
     txtFnlBlkFuel.innerHTML = fuelData.final_ramp + units;
+
+    let finalTime = plnTime;
+    finalTime += tankTime + disc_total_time;
+    txtFinalTime.innerHTML = FormatFuelTime(finalTime);
 
     let zfw = Number(flightData.weights.est_zfw);
     flightData.weights.est_tow = zfw + (Number(fuelData.final_ramp) - Number(fuelData.taxi));
@@ -533,6 +625,12 @@ function AddDiscRow(idx) {
     newDiv.appendChild(newSpan);
 
     newRow.appendChild(newDiv);
+
+    var newP = document.createElement('p');
+    newP.className = 'fuel-time';
+    newP.innerHTML = "00:00";
+    newP.id = "txtDiscTime" + idx.toString();
+    newRow.appendChild(newP);
 
     list.appendChild(newRow);
 

@@ -117,6 +117,15 @@
   margin-bottom: auto;
 }
 
+.fuel-time {
+  font-size: 20px;
+  text-align: right;
+  font-weight: 300;
+  margin-right: 15px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
 .fuel-inp-div {
   float: right;
   margin-left: auto;
@@ -450,7 +459,7 @@ iframe {
   pointer-events: none;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 545px) {
   .table-row-imp h3,
   .fuel-val,
   .fuel-inp,
