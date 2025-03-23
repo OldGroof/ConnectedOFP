@@ -390,11 +390,19 @@ function GetFuelPlan() {
     let selAltn = 0;
     if (flightData.select_alternate != null)
         selAltn = flightData.select_alternate;
-    txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
+    if (flightData.alternate.length != null) {
+        txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
+    } else {
+        txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate.ete);
+    }
 
     let plnTime = 0;
     plnTime = Number(flightData.times.taxi_out) + Number(flightData.times.est_time_enroute) + Number(flightData.times.contfuel_time) + Number(flightData.times.reserve_time);
-    plnTime += Number(flightData.alternate[selAltn].ete);
+    if (flightData.alternate.length != null) {
+        plnTime += Number(flightData.alternate[selAltn].ete);
+    } else {
+        plnTime += Number(flightData.alternate.ete);
+    }
     flightData.times.endurance = plnTime.toString();
     txtPlanTime.innerHTML = FormatFuelTime(flightData.times.endurance);
 
@@ -478,11 +486,19 @@ function UpdateFuelPlan() {
     let selAltn = 0;
     if (flightData.select_alternate != null)
         selAltn = flightData.select_alternate;
-    txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
+    if (flightData.select_alternate != null) {
+        txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
+    } else {
+        txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate.ete);
+    }
 
     let plnTime = 0;
     plnTime = Number(flightData.times.taxi_out) + Number(flightData.times.est_time_enroute) + Number(flightData.times.contfuel_time) + Number(flightData.times.reserve_time);
-    plnTime += Number(flightData.alternate[selAltn].ete);
+    if (flightData.select_alternate != null) {
+        plnTime += Number(flightData.alternate[selAltn].ete);
+    } else {
+        plnTime += Number(flightData.alternate.ete);
+    }
     flightData.times.endurance = plnTime.toString();
     txtPlanTime.innerHTML = FormatFuelTime(flightData.times.endurance);
 
