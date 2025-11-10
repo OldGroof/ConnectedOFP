@@ -272,7 +272,7 @@ function FetchSimbriefAPI() {
     //https://www.simbrief.com/api/xml.fetcher.php?userid=xxxxxx&json=1
     //https://www.simbrief.com/api/xml.fetcher.php?username=xxxxxx&json=1
     let url = 'https://www.simbrief.com/api/xml.fetcher.php?userid=';
-    if (isNaN(smbrfID) || smbrfID > 999999)
+    if (isNaN(smbrfID))
         url = 'https://www.simbrief.com/api/xml.fetcher.php?username='
     url += smbrfID + "&json=1";
 
