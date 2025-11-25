@@ -148,6 +148,11 @@ function LoadPage() {
     if (flightData == null || isEmpty(flightData))
         return;
 
+    if (flightData.params.units == "kgs")
+        units = " kg";
+    else
+        units = " lb";
+
     let date = FormatDate(flightData.api_params.date);
     let fltID = "Flight - ";
     if (!isEmpty(flightData.general.icao_airline))
