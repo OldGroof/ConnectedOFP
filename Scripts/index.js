@@ -340,7 +340,10 @@ function GetPDF() {
     console.log('GetPDF.');
 
     const url = flightData.files.directory + flightData.files.pdf.link;
-    outPDF.src = url;
+    console.log(url)
+
+    const cont = "https://drive.google.com/gview?embedded=true&url=" + encodeURIComponent(url);
+    outPDF.src = cont;
 }
 
 function FormatFuelTime(seconds) {
