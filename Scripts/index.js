@@ -342,8 +342,17 @@ function GetPDF() {
     const url = flightData.files.directory + flightData.files.pdf.link;
     console.log(url);
 
-    const dir = '/pdfjs-5/web/viewer.html?file=' + url;
-    outPDF.src = dir;
+    fetch(url)
+    .then(res => res.blob())
+    .then(blob => {
+        const blobUrl = URL.createObjectURL(blob);
+        const viewerUrl = `/pdfjs-5/web/viewer.html?file=${encodeURIComponent(blobUrl)}`;
+
+        outPDF.src = viewerUrl;
+    })
+    .catch(err => {
+        console.error("Failed to load PDF", err);
+    });
 }
 
 function FormatFuelTime(seconds) {
