@@ -340,9 +340,7 @@ function GetPDF() {
     console.log('GetPDF.');
 
     const url = flightData.files.directory + flightData.files.pdf.link;
-
-    const dir = '/pdfjs-5/web/viewer.html?file=' + url;
-    outPDF.src = dir;
+    outPDF.src = url;
 }
 
 function FormatFuelTime(seconds) {
