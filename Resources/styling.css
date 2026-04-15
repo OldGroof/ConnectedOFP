@@ -417,17 +417,6 @@ iframe {
   padding-inline: 5px;
 }
 
-.leg-box-third {
-  position: relative;
-  display: inline-block;
-  width: 33%;
-  border: solid;
-  border-width: 1px;
-  font-size: 26px;
-  font-weight: 350;
-  text-align: left;
-  padding-inline: 5px;
-}
 
 .leg-row-label {
   font-size: 15px;

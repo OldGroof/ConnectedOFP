@@ -276,7 +276,8 @@ function SetFlightData(data) {
         out_time: "",
         off_time: "",
         on_time: "",
-        in_time: ""
+        in_time: "",
+        arr_fuel: ""
     };
 
     localStorage.setItem('flight_data', JSON.stringify(flightData));
@@ -820,11 +821,12 @@ function GetNavLog() {
     UpdateNavLog();
 
     let date = new Date(flightData.times.sched_out * 1000);
-    const out = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+    const out = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
     date = new Date(flightData.times.sched_off * 1000);
-    const off = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+    const off = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
 
-    AddDepRow(flightData.origin, out, off);
+    let minFuel = Number(fuelData.min_takeoff) - Number(fuelData.contingency);
+    AddDepRow(flightData.origin, out, off, minFuel);
 
     let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
     for (let i = 0; i < flightData.navlog.fix.length - 1; i++) {
@@ -833,13 +835,13 @@ function GetNavLog() {
         AddLegRow(std, leg);
     }
 
-    // we want to insert the arrival airport here too.
-    // again replacing some options for on in and arrival fuel.
-    // eto -> sched_on (remains same value)
-    // efob -> sched_in
-    // ato -> on
-    // afob -> in
-    // fpeto -> afob
+    date = new Date(flightData.times.sched_on * 1000);
+    const sched_on = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
+    date = new Date(flightData.times.sched_in * 1000);
+    const sched_in = date.getUTCHours() * 3600 + date.getUTCMinutes() * 60 + date.getUTCSeconds();
+    minFuel = minFuel - Number(fuelData.enroute_burn);
+
+    AddArrRow(flightData.destination, sched_on, sched_in, minFuel);
 }
 
 function FormatLegTime(seconds) {
@@ -860,7 +862,7 @@ function FormatToSeconds(timeStr) {
     return (hours * 3600) + (minutes * 60);
 }
 
-function AddDepRow(arp, out, off) {
+function AddDepRow(arp, out, off, mfob) {
     var list = document.getElementById('legList');
 
     var newRow = document.createElement('div');
@@ -885,7 +887,8 @@ function AddDepRow(arp, out, off) {
     newDiv.style = 'width: 100%; display: flex;';
 
     var newBox = document.createElement('div');
-    newBox.className = 'leg-box-third'
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
     var newLabel = document.createElement('label');
     newLabel.className = 'leg-row-label';
     newLabel.innerHTML = 'SCHED OUT';
@@ -896,7 +899,8 @@ function AddDepRow(arp, out, off) {
     newDiv.appendChild(newBox);
 
     newBox = document.createElement('div');
-    newBox.className = 'leg-box-third'
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
     newLabel = document.createElement('label');
     newLabel.className = 'leg-row-label';
     newLabel.innerHTML = 'SCHED OFF';
@@ -907,13 +911,14 @@ function AddDepRow(arp, out, off) {
     newDiv.appendChild(newBox);
 
     newBox = document.createElement('div');
-    newBox.className = 'leg-box-third'
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
     newLabel = document.createElement('label');
     newLabel.className = 'leg-row-label';
     newLabel.innerHTML = 'MFOB';
     newBox.appendChild(newLabel);
     newP = document.createElement('p');
-    newP.innerHTML = Number(fuelData.min_takeoff) - Number(fuelData.contingency);
+    newP.innerHTML = mfob;
     newBox.appendChild(newP);
     newDiv.appendChild(newBox);
 
@@ -923,7 +928,8 @@ function AddDepRow(arp, out, off) {
     newDiv.style = 'width: 100%; display: flex;';
 
     newBox = document.createElement('div');
-    newBox.className = 'leg-box-third'
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
     newLabel = document.createElement('label');
     newLabel.className = 'leg-row-label';
     newLabel.innerHTML = 'OUT';
@@ -950,7 +956,6 @@ function AddDepRow(arp, out, off) {
     newBox.appendChild(newInp);
     newDiv.appendChild(newBox);
     
-
     newInp.addEventListener('focusout', function (event) {
         liveData.out_time = this.value;
         UpdateNavLog();
@@ -965,7 +970,8 @@ function AddDepRow(arp, out, off) {
     });
 
     newBox = document.createElement('div');
-    newBox.className = 'leg-box-third'
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
     newLabel = document.createElement('label');
     newLabel.className = 'leg-row-label';
     newLabel.innerHTML = 'OFF';
@@ -1006,7 +1012,8 @@ function AddDepRow(arp, out, off) {
     });
 
     newBox = document.createElement('div');
-    newBox.className = 'leg-box-third'
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
     newLabel = document.createElement('label');
     newLabel.className = 'leg-row-label';
     newLabel.innerHTML = 'DEP FUEL';
@@ -1029,11 +1036,218 @@ function AddDepRow(arp, out, off) {
     newInp.addEventListener('focusout', function (even) {
         liveData.dep_fuel = this.value;
         UpdateNavLog();
+        let diff = null;
+        if (liveData.dep_fuel != "" && liveData.dep_fuel != 0) {
+            diff = Number(liveData.dep_fuel) - mfob;
+        }
+        UpdateInputLabel(this, diff);
     });
     newInp.addEventListener('keydown', function (event) {
         if (event.key === 'Enter')
             this.blur();
     });
+
+    let diff = null;
+    if (liveData.dep_fuel != "" && liveData.dep_fuel != 0) {
+        diff = Number(liveData.dep_fuel) - mfob;
+    }
+    UpdateInputLabel(newInp, diff);
+
+    newRow.appendChild(newDiv);
+
+    list.appendChild(newRow);
+}
+
+function AddArrRow(arp, sched_on, sched_in, mfob) {
+    var list = document.getElementById('legList');
+
+    var newRow = document.createElement('div');
+    newRow.className = 'leg-row';
+
+    var newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    var newName = document.createElement('div');
+    newName.className = 'leg-ident'
+    newName.innerHTML = arp.icao_code;
+    newDiv.appendChild(newName);
+
+    newName = document.createElement('div');
+    newName.className = 'leg-name'
+    newName.innerHTML = arp.name;
+    newDiv.appendChild(newName);
+
+    newRow.appendChild(newDiv);
+
+    newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    var newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
+    var newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'SCHED ON';
+    newBox.appendChild(newLabel);
+    var newP = document.createElement('p');
+    newP.innerHTML = FormatLegTime(sched_on);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'SCHED IN';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = FormatLegTime(sched_in);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'MFOB';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = mfob;
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newRow.appendChild(newDiv);
+
+    newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'ON';
+    newBox.appendChild(newLabel);
+
+    let newInp = document.createElement('input');
+    newInp.id = 'inpOn' + arp.icao_code + sched_on;
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = '-';
+    newInp.maxLength = '4';
+    newInp.oninput = function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length >= 2) {
+            let hours = parseInt(this.value.slice(0, 2), 10);
+            let minutes = parseInt(this.value.slice(2), 10);
+            if (hours > 23 || minutes > 59) {
+                this.value = this.value.slice(0, -1);
+            }
+        }
+    };
+    if (liveData.on_time != "")
+        newInp.value = liveData.on_time.toString();
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+    
+    newInp.addEventListener('focusout', function (event) {
+        liveData.on_time = this.value;
+        UpdateNavLog();
+    });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const nextInput = document.getElementById('inpIn' + arp.icao_code + sched_in);
+            if (nextInput && this.value != "")
+                nextInput.focus();
+            this.blur();
+        }
+    });
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'IN';
+    newBox.appendChild(newLabel);
+
+    newInp = document.createElement('input');
+    newInp.id = 'inpIn' + arp.icao_code + sched_in;
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = '-';
+    newInp.maxLength = '4';
+    newInp.oninput = function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length >= 2) {
+            let hours = parseInt(this.value.slice(0, 2), 10);
+            let minutes = parseInt(this.value.slice(2), 10);
+            if (hours > 23 || minutes > 59) {
+                this.value = this.value.slice(0, -1);
+            }
+        }
+    };
+    if (liveData.in_time != "")
+        newInp.value = liveData.in_time.toString();
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+
+    newInp.addEventListener('focusout', function (even) {
+        liveData.in_time = this.value;
+        UpdateNavLog();
+    });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const nextInput = document.getElementById('inpArrFuel' + arp.icao_code);
+            if (nextInput && this.value != "")
+                nextInput.focus();
+            this.blur();
+        }
+    });
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box'
+    newBox.style = "width: 33%;"
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'ARR FUEL';
+    newBox.appendChild(newLabel);
+
+    newInp = document.createElement('input');
+    newInp.id = 'inpArrFuel' + arp.icao_code;
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = "-";
+    newInp.maxLength = '6';
+    newInp.oninput = function () {
+        this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+    };
+    if (liveData.arr_fuel != "")
+        newInp.value = liveData.arr_fuel.toString();
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+
+    newInp.addEventListener('focusout', function (even) {
+        liveData.arr_fuel = this.value;
+        UpdateNavLog();
+        let diff = null;
+        if (liveData.arr_fuel != "" && liveData.arr_fuel != 0) {
+            diff = Number(liveData.arr_fuel) - mfob;
+        }
+        UpdateInputLabel(this, diff);
+    });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter')
+            this.blur();
+    });
+
+    let diff = null;
+    if (liveData.arr_fuel != "" && liveData.arr_fuel != 0) {
+        diff = Number(liveData.arr_fuel) - mfob;
+    }
+    UpdateInputLabel(newInp, diff);
 
     newRow.appendChild(newDiv);
 
