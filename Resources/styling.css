@@ -357,20 +357,6 @@ iframe {
   color: rgb(78, 78, 78);
 }
 
-.act-inp {
-  float: right;
-  margin-left: auto;
-  width: 100px;
-  font-size: 20px;
-  text-align: right;
-  font-weight: 350;
-  color: rgb(78, 78, 78);
-  background-color: transparent;
-  border: none;
-  outline: none;
-  cursor: text;
-}
-
 .inp-inp:focus {
   outline: none;
 }
@@ -423,6 +409,18 @@ iframe {
   position: relative;
   display: inline-block;
   width: 25%;
+  border: solid;
+  border-width: 1px;
+  font-size: 26px;
+  font-weight: 350;
+  text-align: left;
+  padding-inline: 5px;
+}
+
+.leg-box-third {
+  position: relative;
+  display: inline-block;
+  width: 33%;
   border: solid;
   border-width: 1px;
   font-size: 26px;
@@ -555,10 +553,6 @@ iframe {
   .close:after,
   .close:before {
     background-color: rgb(238, 238, 238);
-  }
-
-  .act-inp {
-    color: rgb(238, 238, 238);
   }
 
   .leg-list {

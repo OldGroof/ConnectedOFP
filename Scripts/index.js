@@ -25,12 +25,6 @@ const butDiscAdd = document.getElementById('butDiscAdd');
 const txtFnlBlkFuel = document.getElementById('txtFnlBlkFuel');
 const txtFinalTime = document.getElementById('txtFinalTime');
 
-const inpActFuel = document.getElementById('inpActFuel');
-const inpOutTime = document.getElementById('inpOut');
-const inpOffTime = document.getElementById('inpOff');
-const inpOnTime = document.getElementById('inpOn');
-const inpInTime = document.getElementById('inpIn');
-
 var smbrfID = "";
 var units = " kg"
 var flightData;
@@ -73,7 +67,6 @@ function FormatDate(seconds) {
 function GoHome() {
     document.getElementById('divOFP').style = "display: none;";
     document.getElementById('divPlnFuel').style = "display: none;";
-    document.getElementById('divActFuel').style = "display: none;";
     document.getElementById('divNavLog').style = "display: none;";
 
 
@@ -82,7 +75,6 @@ function GoHome() {
 
 function GoOFP() {
     document.getElementById('divHome').style = "display: none;";
-    document.getElementById('divActFuel').style = "display: none;";
     document.getElementById('divPlnFuel').style = "display: none;";
     document.getElementById('divNavLog').style = "display: none;";
 
@@ -93,28 +85,16 @@ function GoOFP() {
 function GoPlnFuel() {
     document.getElementById('divHome').style = "display: none;";
     document.getElementById('divOFP').style = "display: none;";
-    document.getElementById('divActFuel').style = "display: none;";
     document.getElementById('divNavLog').style = "display: none;";
 
 
     document.getElementById('divPlnFuel').style = "display: block;";
 }
 
-function GoActFuel() {
-    document.getElementById('divHome').style = "display: none;";
-    document.getElementById('divOFP').style = "display: none;";
-    document.getElementById('divPlnFuel').style = "display: none;";
-    document.getElementById('divNavLog').style = "display: none;";
-
-
-    document.getElementById('divActFuel').style = "display: block;";
-}
-
 function GoNavLog() {
     document.getElementById('divHome').style = "display: none;";
     document.getElementById('divOFP').style = "display: none;";
     document.getElementById('divPlnFuel').style = "display: none;";
-    document.getElementById('divActFuel').style = "display: none;";
 
 
     document.getElementById('divNavLog').style = "display: block;";
@@ -166,7 +146,6 @@ function LoadPage() {
 
     GetPDF();
     GetFuelPlan();
-    GetActFuel();
     GetNavLog();
 }
 
@@ -175,7 +154,6 @@ function ResetPage() {
 
     ResetPDF();
     ResetFuelPlan();
-    ResetLiveData();
     ResetNavlog();
 }
 function ResetPDF() {
@@ -217,21 +195,7 @@ function ResetFuelPlan() {
     UpdateTOWGauge(0, 1);
     UpdateLWGauge(0, 1);
 }
-function ResetLiveData() {
-    console.log('ResetLiveData');
 
-    inpActFuel.disabled = true;
-    inpActFuel.placeholder = "Actual Fuel";
-    inpActFuel.value = "";
-    inpOutTime.disabled = true;
-    inpOutTime.value = "";
-    inpOffTime.disabled = true;
-    inpOffTime.value = "";
-    inpOnTime.disabled = true;
-    inpOnTime.value = "";
-    inpInTime.disabled = true;
-    inpInTime.value = "";
-}
 function ResetNavlog() {
     console.log('ResetNavlog');
 
@@ -332,7 +296,6 @@ function SetFlightData(data) {
 
     GetPDF();
     GetFuelPlan();
-    GetActFuel();
     GetNavLog();
 }
 
@@ -586,8 +549,6 @@ function UpdateFuelPlan() {
     UpdateTOWGauge(flightData.weights.est_tow, flightData.weights.max_tow);
     UpdateLWGauge(flightData.weights.est_ldw, flightData.weights.max_ldw);
 
-    inpActFuel.placeholder = fuelData.final_ramp.toString();
-
     localStorage.setItem('flight_data', JSON.stringify(flightData));
     localStorage.setItem('fuel_data', JSON.stringify(fuelData));
 }
@@ -804,113 +765,6 @@ function UpdateLWGauge(val, max_val) {
     el.innerHTML = percent + "%";
 }
 
-function GetActFuel() {
-    console.log('GetActFuel');
-
-    inpActFuel.disabled = false;
-    inpActFuel.placeholder = fuelData.final_ramp.toString();
-    if (liveData.dep_fuel != "")
-        inpActFuel.value = liveData.dep_fuel.toString();
-    inpActFuel.addEventListener('focusout', function (event) {
-        liveData.dep_fuel = this.value;
-        UpdateNavLog();
-    });
-    inpActFuel.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter')
-            this.blur();
-    });
-
-    inpOutTime.disabled = false;
-    if (liveData.out_time != "")
-        inpOutTime.value = liveData.out_time.toString();
-    inpOutTime.addEventListener('focusout', function (event) {
-        liveData.out_time = this.value;
-        UpdateNavLog();
-    });
-    inpOutTime.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter')
-            this.blur();
-    });
-    inpOutTime.oninput = function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length >= 2) {
-            let hours = parseInt(this.value.slice(0, 2), 10);
-            let minutes = parseInt(this.value.slice(2), 10);
-            if (hours > 23 || minutes > 59) {
-                this.value = this.value.slice(0, -1);
-            }
-        }
-    };
-
-    inpOffTime.disabled = false;
-    if (liveData.off_time != "")
-        inpOffTime.value = liveData.off_time.toString();
-    inpOffTime.addEventListener('focusout', function (event) {
-        liveData.off_time = this.value;
-        UpdateNavLog();
-    });
-    inpOffTime.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter')
-            this.blur();
-    });
-    inpOffTime.oninput = function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length >= 2) {
-            let hours = parseInt(this.value.slice(0, 2), 10);
-            let minutes = parseInt(this.value.slice(2), 10);
-            if (hours > 23 || minutes > 59) {
-                this.value = this.value.slice(0, -1);
-            }
-        }
-    };
-
-    inpOnTime.disabled = false;
-    if (liveData.on_time != "")
-        inpOnTime.value = liveData.on_time.toString();
-    inpOnTime.addEventListener('focusout', function (event) {
-        liveData.on_time = this.value;
-        let last_leg = flightData.navlog.fix[flightData.navlog.fix.length - 1];
-        UpdateLegTime(last_leg, this.value);
-        UpdateNavLog();
-    });
-    inpOnTime.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter')
-            this.blur();
-    });
-    inpOnTime.oninput = function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length >= 2) {
-            let hours = parseInt(this.value.slice(0, 2), 10);
-            let minutes = parseInt(this.value.slice(2), 10);
-            if (hours > 23 || minutes > 59) {
-                this.value = this.value.slice(0, -1);
-            }
-        }
-    };
-
-    inpInTime.disabled = false;
-    if (liveData.in_time != "")
-        inpInTime.value = liveData.in_time.toString();
-    inpInTime.addEventListener('focusout', function (event) {
-        liveData.in_time = this.value;
-        UpdateNavLog();
-    });
-    inpInTime.addEventListener('keydown', function (event) {
-        if (event.key === 'Enter')
-            this.blur();
-    });
-    inpInTime.oninput = function () {
-        this.value = this.value.replace(/[^0-9]/g, '');
-        if (this.value.length >= 2) {
-            let hours = parseInt(this.value.slice(0, 2), 10);
-            let minutes = parseInt(this.value.slice(2), 10);
-            if (hours > 23 || minutes > 59) {
-                this.value = this.value.slice(0, -1);
-            }
-        }
-    };
-}
-
 function UpdateNavLog() {
     let min_dep_fuel = Number(fuelData.min_takeoff) - Number(fuelData.contingency);
     let dep_fuel = Number(fuelData.final_ramp);
@@ -924,14 +778,29 @@ function UpdateNavLog() {
     if (liveData != null && liveData.off_time != "")
         atd = FormatToSeconds(liveData.off_time);
 
+    let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
     for (let i = 0; i < flightData.navlog.fix.length; i++) {
         let leg = flightData.navlog.fix[i];
+        let eto = std + Number(leg.time_total);
+
         fuel_use = Number(leg.fuel_totalused);
 
         leg.fuel_min_onboard = (min_dep_fuel - fuel_use).toString();
         leg.fuel_plan_onboard = (dep_fuel - fuel_use).toString();
+        let txtEFOB = document.getElementById('txtEFOB-' + leg.ident + "-" + eto);
+        if (txtEFOB != null)
+            txtEFOB.innerHTML = leg.fuel_plan_onboard;
 
         leg.fpeto = (atd + Number(leg.time_total)).toString();
+        let txtFPETO = document.getElementById('txtFPETO-' + leg.ident + "-" + eto);
+        if (txtFPETO != null) {
+            let fpeto = eto;
+            if (leg.fpeto != null)
+                fpeto = leg.fpeto;
+            while (fpeto >= 86400)
+                fpeto -= 86400;
+            txtFPETO.innerHTML = FormatLegTime(fpeto);
+        }
     }
 
     localStorage.setItem('flight_data', JSON.stringify(flightData));
@@ -950,17 +819,32 @@ function GetNavLog() {
 
     UpdateNavLog();
 
+    let date = new Date(flightData.times.sched_out * 1000);
+    const out = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+    date = new Date(flightData.times.sched_off * 1000);
+    const off = date.getHours() * 3600 + date.getMinutes() * 60 + date.getSeconds();
+
+    AddDepRow(flightData.origin, out, off);
+
     let std = Number(flightData.api_params.dephour) + Number(flightData.api_params.depmin) + (Number(flightData.api_params.taxiout) * 60);
-    for (let i = 0; i < flightData.navlog.fix.length; i++) {
+    for (let i = 0; i < flightData.navlog.fix.length - 1; i++) {
         let leg = flightData.navlog.fix[i];
 
         AddLegRow(std, leg);
     }
+
+    // we want to insert the arrival airport here too.
+    // again replacing some options for on in and arrival fuel.
+    // eto -> sched_on (remains same value)
+    // efob -> sched_in
+    // ato -> on
+    // afob -> in
+    // fpeto -> afob
 }
 
 function FormatLegTime(seconds) {
     let hours = Math.floor(seconds / 3600);
-    let minutes = Math.ceil((seconds % 3600) / 60);
+    let minutes = Math.floor((seconds % 3600) / 60);
     let HH = String(hours).padStart(2, '0');
     let MM = String(minutes).padStart(2, '0');
     return `${HH}${MM}`;
@@ -974,6 +858,186 @@ function FormatToSeconds(timeStr) {
     let minutes = parseInt(timeStr.substring(2, 4), 10);
 
     return (hours * 3600) + (minutes * 60);
+}
+
+function AddDepRow(arp, out, off) {
+    var list = document.getElementById('legList');
+
+    var newRow = document.createElement('div');
+    newRow.className = 'leg-row';
+
+    var newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    var newName = document.createElement('div');
+    newName.className = 'leg-ident'
+    newName.innerHTML = arp.icao_code;
+    newDiv.appendChild(newName);
+
+    newName = document.createElement('div');
+    newName.className = 'leg-name'
+    newName.innerHTML = arp.name;
+    newDiv.appendChild(newName);
+
+    newRow.appendChild(newDiv);
+
+    newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    var newBox = document.createElement('div');
+    newBox.className = 'leg-box-third'
+    var newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'SCHED OUT';
+    newBox.appendChild(newLabel);
+    var newP = document.createElement('p');
+    newP.innerHTML = FormatLegTime(out);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box-third'
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'SCHED OFF';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = FormatLegTime(off);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box-third'
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'MFOB';
+    newBox.appendChild(newLabel);
+    newP = document.createElement('p');
+    newP.innerHTML = Number(fuelData.min_takeoff) - Number(fuelData.contingency);
+    newBox.appendChild(newP);
+    newDiv.appendChild(newBox);
+
+    newRow.appendChild(newDiv);
+
+    newDiv = document.createElement('div');
+    newDiv.style = 'width: 100%; display: flex;';
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box-third'
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'OUT';
+    newBox.appendChild(newLabel);
+
+    let newInp = document.createElement('input');
+    newInp.id = 'inpOut' + arp.icao_code + out;
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = '-';
+    newInp.maxLength = '4';
+    newInp.oninput = function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length >= 2) {
+            let hours = parseInt(this.value.slice(0, 2), 10);
+            let minutes = parseInt(this.value.slice(2), 10);
+            if (hours > 23 || minutes > 59) {
+                this.value = this.value.slice(0, -1);
+            }
+        }
+    };
+    if (liveData.out_time != "")
+        newInp.value = liveData.out_time.toString();
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+    
+
+    newInp.addEventListener('focusout', function (event) {
+        liveData.out_time = this.value;
+        UpdateNavLog();
+    });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const nextInput = document.getElementById('inpOff' + arp.icao_code + off);
+            if (nextInput && this.value != "")
+                nextInput.focus();
+            this.blur();
+        }
+    });
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box-third'
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'OFF';
+    newBox.appendChild(newLabel);
+
+    newInp = document.createElement('input');
+    newInp.id = 'inpOff' + arp.icao_code + off;
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = '-';
+    newInp.maxLength = '4';
+    newInp.oninput = function () {
+        this.value = this.value.replace(/[^0-9]/g, '');
+        if (this.value.length >= 2) {
+            let hours = parseInt(this.value.slice(0, 2), 10);
+            let minutes = parseInt(this.value.slice(2), 10);
+            if (hours > 23 || minutes > 59) {
+                this.value = this.value.slice(0, -1);
+            }
+        }
+    };
+    if (liveData.off_time != "")
+        newInp.value = liveData.off_time.toString();
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+
+    newInp.addEventListener('focusout', function (even) {
+        liveData.off_time = this.value;
+        UpdateNavLog();
+    });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter') {
+            const nextInput = document.getElementById('inpDepFuel' + arp.icao_code);
+            if (nextInput && this.value != "")
+                nextInput.focus();
+            this.blur();
+        }
+    });
+
+    newBox = document.createElement('div');
+    newBox.className = 'leg-box-third'
+    newLabel = document.createElement('label');
+    newLabel.className = 'leg-row-label';
+    newLabel.innerHTML = 'DEP FUEL';
+    newBox.appendChild(newLabel);
+
+    newInp = document.createElement('input');
+    newInp.id = 'inpDepFuel' + arp.icao_code;
+    newInp.type = "text";
+    newInp.inputMode = "numeric";
+    newInp.placeholder = fuelData.final_ramp.toString();
+    newInp.maxLength = '6';
+    newInp.oninput = function () {
+        this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');
+    };
+    if (liveData.dep_fuel != "")
+        newInp.value = liveData.dep_fuel.toString();
+    newBox.appendChild(newInp);
+    newDiv.appendChild(newBox);
+
+    newInp.addEventListener('focusout', function (even) {
+        liveData.dep_fuel = this.value;
+        UpdateNavLog();
+    });
+    newInp.addEventListener('keydown', function (event) {
+        if (event.key === 'Enter')
+            this.blur();
+    });
+
+    newRow.appendChild(newDiv);
+
+    list.appendChild(newRow);
 }
 
 function AddLegRow(std, leg) {
@@ -1040,6 +1104,7 @@ function AddLegRow(std, leg) {
     newLabel.innerHTML = 'EFOB';
     newBox.appendChild(newLabel);
     newP = document.createElement('p');
+    newP.id = 'txtEFOB-' + leg.ident + "-" + eto;
     newP.innerHTML = leg.fuel_plan_onboard;
     newBox.appendChild(newP);
     newDiv.appendChild(newBox);
@@ -1154,6 +1219,7 @@ function AddLegRow(std, leg) {
     newLabel.innerHTML = 'FPETO';
     newBox.appendChild(newLabel);
     newP = document.createElement('p');
+    newP.id = 'txtFPETO-' + leg.ident + "-" + eto;
 
     let fpeto = eto;
     if (leg.fpeto != null)

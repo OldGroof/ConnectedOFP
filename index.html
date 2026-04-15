@@ -51,19 +51,15 @@
                     <span class="material-icons" style="font-size: 48px;">receipt_long</span>
                     <p>OFP</p>
                 </a>
-                <a class="index-button" onclick="GoNavLog()">
-                    <span class="material-icons" style="font-size: 48px;">list</span>
-                    <p>Navlog</p>
-                </a>
-            </div>
-            <div style="display: flex; height: 45%;">
                 <a class="index-button" onclick="GoPlnFuel()">
                     <span class="material-icons" style="font-size: 48px;">view_in_ar</span>
                     <p>Fuel Planning</p>
                 </a>
-                <a class="index-button" onclick="GoActFuel()">
-                    <span class="material-icons" style="font-size: 48px;">speed</span>
-                    <p>Actual Fuel</p>
+            </div>
+            <div style="display: flex; height: 45%;">
+                <a class="index-button" style="width: 100%;" onclick="GoNavLog()">
+                    <span class="material-icons" style="font-size: 48px;">list</span>
+                    <p>Navlog</p>
                 </a>
             </div>
         </div>
@@ -95,10 +91,6 @@
                 <a id="pln" onclick="GoPlnFuel()" style="cursor: pointer;">
                     <span class="material-icons">view_in_ar</span>
                     <p>Fuel Plan</p>
-                </a>
-                <a id="act" onclick="GoActFuel()" style="cursor: pointer;">
-                    <span class="material-icons">speed</span>
-                    <p>Actual Fuel</p>
                 </a>
                 <a id="nav" onclick="GoNavLog()" style="cursor: pointer;">
                     <span class="material-icons">list</span>
@@ -205,10 +197,6 @@
                     <span class="material-icons">view_in_ar</span>
                     <p>Fuel Plan</p>
                 </a>
-                <a id="act" onclick="GoActFuel()" style="cursor: pointer;">
-                    <span class="material-icons">speed</span>
-                    <p>Actual Fuel</p>
-                </a>
                 <a id="nav" onclick="GoNavLog()" style="cursor: pointer;">
                     <span class="material-icons">list</span>
                     <p>Navlog</p>
@@ -216,69 +204,6 @@
             </div>
         </div>
         <div style="height: 65px;"></div>
-    </div>
-
-    <div id="divActFuel" style="display: none;">
-        <div class="header" style="z-index: 5">
-            <h1>Actual Fuel</h1>
-            <a id="home" style="float: right; margin-left: auto;" onclick="GoHome()"><span
-                    class="material-icons">home</span></a>
-        </div>
-
-        <div class="bar" style="margin-top: 84px; ">
-            <div style="display: flex; width: 100%;">
-                <h3 style="float: left;">Actual Fuel</h3>
-                <input id="inpActFuel" disabled class="act-inp" type="text" inputmode="numeric"
-                    placeholder="Actual Fuel" maxlength="6"
-                    oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                </input>
-            </div>
-            <div style="display: flex; width: 100%;">
-                <h3 style="float: left;">Out</h3>
-                <input id="inpOut" disabled class="act-inp" type="text" inputmode="numeric" placeholder="Out Time"
-                    maxlength="4">
-                </input>
-            </div>
-            <div style="display: flex; width: 100%;">
-                <h3 style="float: left;">Off</h3>
-                <input id="inpOff" disabled class="act-inp" type="text" inputmode="numeric" placeholder="Off Time"
-                    maxlength="4">
-                </input>
-            </div>
-            <div style="display: flex; width: 100%;">
-                <h3 style="float: left;">On</h3>
-                <input id="inpOn" disabled class="act-inp" type="text" inputmode="numeric" placeholder="On Time"
-                    maxlength="4">
-                </input>
-            </div>
-            <div style="display: flex; width: 100%;">
-                <h3 style="float: left;">In</h3>
-                <input id="inpIn" disabled class="act-inp" type="text" inputmode="numeric" placeholder="In Time"
-                    maxlength="4">
-                </input>
-            </div>
-        </div>
-
-        <div class="footer" style="z-index: 5">
-            <div style="display: flex; justify-content: center;">
-                <a id="ofp" onclick="GoOFP()" style="cursor: pointer;">
-                    <span class="material-icons">receipt_long</span>
-                    <p>OFP</p>
-                </a>
-                <a id="pln" onclick="GoPlnFuel()" style="cursor: pointer;">
-                    <span class="material-icons">view_in_ar</span>
-                    <p>Fuel Plan</p>
-                </a>
-                <a id="act" style="cursor: default;">
-                    <span class="material-icons">speed</span>
-                    <p>Actual Fuel</p>
-                </a>
-                <a id="nav" onclick="GoNavLog()" style="cursor: pointer;">
-                    <span class="material-icons">list</span>
-                    <p>Navlog</p>
-                </a>
-            </div>
-        </div>
     </div>
 
     <div id="divNavLog" style="display: none;">
@@ -301,10 +226,6 @@
                 <a id="pln" onclick="GoPlnFuel()" style="cursor: pointer;">
                     <span class="material-icons">view_in_ar</span>
                     <p>Fuel Plan</p>
-                </a>
-                <a id="act" onclick="GoActFuel()" style="cursor: pointer;">
-                    <span class="material-icons">speed</span>
-                    <p>Actual Fuel</p>
                 </a>
                 <a id="nav" style="cursor: default;">
                     <span class="material-icons">list</span>
