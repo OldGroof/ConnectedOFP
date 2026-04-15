@@ -617,27 +617,34 @@ function AddDiscRow(idx) {
     optDis.hidden = true;
     newSel.appendChild(optDis);
 
-    var optWxr = document.createElement('option');
-    optWxr.value = "weather";
-    optWxr.innerHTML = "Weather";
-    newSel.appendChild(optWxr);
     var optAtc = document.createElement('option');
     optAtc.value = "atc";
     optAtc.innerHTML = "ATC"
-    newSel.appendChild(optAtc);
-    var optCI = document.createElement('option');
-    optCI.value = "highCI";
-    optCI.innerHTML = "Higher CI";
-    newSel.appendChild(optCI);
     var optCRZ = document.createElement('option');
     optCRZ.value = "crzfl";
     optCRZ.innerHTML = "Cruise FL";
-    newSel.appendChild(optCRZ);
+    var optCI = document.createElement('option');
+    optCI.value = "highCI";
+    optCI.innerHTML = "Higher CI";
+
+    var optSlot = document.createElement('option');
+    optSlot.value = "slot";
+    optSlot.innerHTML = "Slots";
+
+    var optWxr = document.createElement('option');
+    optWxr.value = "weather";
+    optWxr.innerHTML = "Weather";
     var optOthr = document.createElement('option');
     optOthr.value = "other";
     optOthr.innerHTML = "Other"
-    newSel.appendChild(optOthr);
 
+
+    newSel.appendChild(optAtc);
+    newSel.appendChild(optCRZ);
+    newSel.appendChild(optCI);
+    newSel.appendChild(optSlot);
+    newSel.appendChild(optWxr);
+    newSel.appendChild(optOthr);
     newRow.append(newSel);
 
     var newDiv = document.createElement('div');
