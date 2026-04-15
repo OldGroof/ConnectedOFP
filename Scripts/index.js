@@ -373,8 +373,11 @@ function GetFuelPlan() {
         let obj = flightData.alternate;
 
         var opt = document.createElement('option');
+        if (obj.icao_code != undefined)
+            opt.innerHTML = obj.icao_code;
+        else
+            opt.innerHTML = "NONE";
         opt.value = 0;
-        opt.innerHTML = obj.icao_code;
         inpAltns.appendChild(opt);
     } else {
         for (let i = 0; i < flightData.alternate.length; i++) {
@@ -389,7 +392,7 @@ function GetFuelPlan() {
             }
         }
     }
-    if (inpAltns.options.length == 0)
+    if (inpAltns.options.length <= 1)
         inpAltns.disabled = true;
 
     let selAltn = 0;
@@ -397,15 +400,17 @@ function GetFuelPlan() {
         selAltn = flightData.select_alternate;
     if (flightData.alternate.length != null) {
         txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
-    } else {
+    } else if (flightData.alternate.ete != undefined) {
         txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate.ete);
+    } else {
+        txtAltnTime.innerHTML = FormatFuelTime(0);
     }
 
     let plnTime = 0;
     plnTime = Number(flightData.times.taxi_out) + Number(flightData.times.est_time_enroute) + Number(flightData.times.contfuel_time) + Number(flightData.times.reserve_time);
     if (flightData.alternate.length != null) {
         plnTime += Number(flightData.alternate[selAltn].ete);
-    } else {
+    } else if (flightData.alternate.ete != undefined) {
         plnTime += Number(flightData.alternate.ete);
     }
     flightData.times.endurance = plnTime.toString();
@@ -463,7 +468,10 @@ function GetFuelPlan() {
 
 function UpdateFuelPlan() {
     if (flightData.alternate.length == null) {
-        fuelData.alternate_burn = flightData.alternate.burn;
+        if (flightData.alternate.burn != undefined)
+            fuelData.alternate_burn = flightData.alternate.burn;
+        else
+            fuelData.alternate_burn = 0;
     } else {
         fuelData.alternate_burn = flightData.alternate[inpAltns.value].burn;
         flightData.select_alternate = inpAltns.value.toString();
@@ -493,15 +501,17 @@ function UpdateFuelPlan() {
         selAltn = flightData.select_alternate;
     if (flightData.select_alternate != null) {
         txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate[selAltn].ete);
-    } else {
+    } else if (flightData.alternate.ete != undefined) {
         txtAltnTime.innerHTML = FormatFuelTime(flightData.alternate.ete);
+    } else {
+        txtAltnTime.innerHTML = FormatFuelTime(0);
     }
 
     let plnTime = 0;
     plnTime = Number(flightData.times.taxi_out) + Number(flightData.times.est_time_enroute) + Number(flightData.times.contfuel_time) + Number(flightData.times.reserve_time);
     if (flightData.select_alternate != null) {
         plnTime += Number(flightData.alternate[selAltn].ete);
-    } else {
+    } else if (flightData.alternate.ete != undefined) {
         plnTime += Number(flightData.alternate.ete);
     }
     flightData.times.endurance = plnTime.toString();
