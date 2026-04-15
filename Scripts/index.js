@@ -625,6 +625,14 @@ function AddDiscRow(idx) {
     optAtc.value = "atc";
     optAtc.innerHTML = "ATC"
     newSel.appendChild(optAtc);
+    var optCI = document.createElement('option');
+    optCI.value = "highCI";
+    optCI.innerHTML = "Higher CI";
+    newSel.appendChild(optCI);
+    var optCRZ = document.createElement('option');
+    optCRZ.value = "crzfl";
+    optCRZ.innerHTML = "Cruise FL";
+    newSel.appendChild(optCRZ);
     var optOthr = document.createElement('option');
     optOthr.value = "other";
     optOthr.innerHTML = "Other"
