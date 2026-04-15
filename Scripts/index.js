@@ -339,7 +339,10 @@ function SetFlightData(data) {
 function GetPDF() {
     console.log('GetPDF.');
 
-    const dir = "https://docs.google.com/gview?url=" + flightData.files.directory + flightData.files.pdf.link + "&embedded=true";
+    const url = flightData.files.directory + flightData.files.pdf.link;
+    console.log(url);
+
+    const dir = '/pdfjs-5/web/viewer.html?file=' + url;
     outPDF.src = dir;
 }
 
