@@ -365,6 +365,7 @@ iframe {
   background-color: rgb(238, 238, 238);
   padding: 5px;
   overflow-y: scroll;
+  overflow-x: hidden;
   height: calc(100% - 10px);
   border-radius: 5px;
   list-style: none;
